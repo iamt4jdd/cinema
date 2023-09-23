@@ -2,7 +2,8 @@ import {
     Home,
     Movie,
     Login,
-    NowShowing
+    NowShowing,
+    Contact
 } from './pages'
 
 
@@ -14,6 +15,7 @@ const publicRoutes = [
     { path: '/movie', component: Movie },
     { path: '/login', component: Login },
     { path: '/now-showing', component: NowShowing },
+    { path: '/contact', component: Contact },
 
 ]
 

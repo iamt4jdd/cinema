@@ -1,9 +1,10 @@
 import {
     Home,
-    Movie,
     Login,
     NowShowing,
-    Contact
+    ComingSoon,
+    Booking,
+    Movie
 } from './pages'
 
 
@@ -12,10 +13,11 @@ import {
 
 const publicRoutes = [
     { path: '/', component: Home },
-    { path: '/movie', component: Movie },
     { path: '/login', component: Login },
     { path: '/now-showing', component: NowShowing },
-    { path: '/contact', component: Contact },
+    { path: '/coming-soon', component: ComingSoon },
+    { path: '/booking', component: Booking },
+    { path: '/movie', component: Movie },
 
 ]
 

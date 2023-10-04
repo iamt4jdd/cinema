@@ -20,7 +20,7 @@ const ContentContainer = ({
   return (
     <>
       <div
-        className={`${className}`}
+        className={`${className} my-10 sm:md-0`}
         {...props}
       >
         <div className="flex flex-col items-center">
@@ -48,7 +48,7 @@ const ContentContainer = ({
 const Footer = () => {
   return (
     <>
-      <div className={`px-[150px] py-6 bg-[#39393a]`}>
+      <div className={`md:px-[150px] py-6 bg-[#39393a]`}>
         <div
           className="flex flex-1 flex-col sm:flex-row"
         >
@@ -62,7 +62,7 @@ const Footer = () => {
             size="large"
             className="flex-grow"
           >
-            <p className='flex flex-col items-center text-white'>
+            <p className='flex flex-col items-center text-gray-300'>
               <span>© cinema.vn</span>
               <span>Hotline: 1900 6017</span>
               <span>Email: askCinemaVn@gmail.com</span>

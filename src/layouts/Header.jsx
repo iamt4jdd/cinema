@@ -13,16 +13,12 @@ const NAV_ITEM = [
     to: "/",
   },
   {
-    title: "Movie",
-    to: "/movie",
-  },
-  {
     title: "Now Showing",
     to: "/now-showing",
   },
   {
-    title: "Contact",
-    to: "/contact",
+    title: "Coming Soon",
+    to: "/coming-soon",
   },
 ];
 
@@ -55,13 +51,12 @@ const Header = () => {
           >
             <Button
               style={{
-                color: "#fff",
                 fontWeight: "800",
                 fontFamily: "Manrope",
-                width: "130px",
+                width: "150px",
               }}
               className={`${isRes === 1 ? "text-xl" : ""} flex justify-center`}
-              type={isRes === 0 ? "text" : "text-black"}
+              type={isRes === 0 ? "text-white" : "text-black"}
               to={item.to}
             >
               {item.title}
@@ -80,11 +75,12 @@ const Header = () => {
 
   return (
     <>
-      <div className="w-full px-40">
+      <div className="w-full md:px-40">
         <div className="flex justify-between">
-          <div className='flex space-x-6'>
+          <div className='flex'>
             <Button
-              className=""
+              className="hidden sm:flex"
+              animation="zoom"
               type="text"
               icon={<FontAwesomeIcon icon={faNewspaper} />}
             >
@@ -92,6 +88,7 @@ const Header = () => {
             </Button>
             <Button
               className=""
+              animation="zoom"
               type="text"
               icon={<FontAwesomeIcon icon={faTicket} />}
             >
@@ -100,6 +97,7 @@ const Header = () => {
           </div>
           <Button
             className=""
+            animation="zoom"
             type="text"
             icon={<FontAwesomeIcon icon={faUser} />}
             to='/login'

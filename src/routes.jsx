@@ -22,7 +22,7 @@ const publicRoutes = [
 ]
 
 const privateRoutes = [
-
+    
 ]
 
 

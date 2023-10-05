@@ -13,6 +13,7 @@ module.exports = withMT({
       animation: {
         'bounce-one': 'bounce-one 1s',
         'appear': 'appear 0.5s ease-in-out',
+        'notification': 'notification ease-in-out .3s, fadeOut 3s .3s ease-in-out forwards',
       },
       keyframes: {
         'bounce-one': {
@@ -24,6 +25,11 @@ module.exports = withMT({
           '0%': { opacity: '0', transform: 'translateY(20%)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
+        notification: {
+          '0%': { opacity: '0', transform: 'translateX(20%)' },
+          '100%': { opacity: '1', transform: 'translateX(0)' },
+        },
+        fadeOut: { '0%': { opacity: '1' }, '100%': { opacity: '0' }}
       },
     },
   },

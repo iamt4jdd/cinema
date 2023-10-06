@@ -1,13 +1,15 @@
-  import { useState, useRef, useEffect } from "react";
-  // import { useNavigate } from "react-router-dom";
-  import axios from "~/api/axios";
+import { useState, useContext , useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import AuthContext from "~/authContext";
+import axios from "~/api/axios";
 
-  import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-  import images from "~/assets/images";
-  import { Button } from "~/components";
-  import { faCircleXmark } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleXmark } from "@fortawesome/free-regular-svg-icons";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+
+
+import images from "~/assets/images";
+import { Button } from "~/components";
 
   const initialRegister = {
     username: "",
@@ -45,7 +47,8 @@ import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
   const Login = () => {
 
-    
+    const navigate = useNavigate()
+    const { setAuth } = useContext(AuthContext);
     const [pageType, setPageType] = useState("login")
     const [message, setMessage] = useState('')
     const [notificationState, setNotificationState] = useState({ color: 'red-400', icon: faCircleXmark, })
@@ -113,10 +116,21 @@ import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
           
           setMessage(loggedInResponse?.data?.message);
-          // const accessToken = loggedInResponse?.data?.token;
-     
-    
+        
+        
+      
           handleNotificationState(loggedInResponse, setLoginData, initialLogin);
+
+          if(loggedInResponse?.data?.accountId != undefined) {
+            const accessToken = loggedInResponse?.data?.token;
+            const email = loginData?.email
+            const password = loginData?.password
+            // console.log(email)
+            // console.log(password)
+            // console.log(accessToken)
+            setAuth({email, password, accessToken});
+            navigate('/booking')
+          }
           
         } else if (isRegister) {
 
@@ -181,7 +195,7 @@ import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
                       ?
                     </h1>
                     <Button
-                      className="w-32 h-10 mt-3 rounded"
+                      className="w-32 h-10 mt-2 rounded"
                       animation="zoom"
                       onClick={() => setPageType("register")}
 
@@ -211,7 +225,7 @@ import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
                   </div>
 
                   <div className="w-full flex justify-evenly">
-                    <h1 className="my-4 mr-20 text-lg text-black opacity-75 font-bold leading-tight text-center">
+                    <h1 className="px-0 my-4 sm:mr-32 text-md sm:text-lg text-black opacity-75 font-bold leading-tight text-center">
                       Already Have An
                       <span className="bg-clip-text text-green-500">
                         &nbsp;Account&nbsp;

@@ -1,3 +1,8 @@
+import AuthContext from "~/authContext";
+import { useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
+
 const Note = ({ color, content, letter }) => {
   return (
     <div className="flex">
@@ -12,6 +17,17 @@ const Note = ({ color, content, letter }) => {
 };
 
 const Booking = () => {
+
+  const { auth } = useContext(AuthContext);
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    console.log(auth)
+    if (!auth) {
+      navigate('/login');
+    }
+  }, [auth, navigate])
+
   return (
     <div className="px-40 py-20">
       <div className="flex flex-1">

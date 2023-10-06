@@ -41,8 +41,6 @@ const Header = () => {
 
   const renderItems = (isRes) => {
     return NAV_ITEM.map((item, index) => {
-
-
       return (
           <div
             key={index}
@@ -56,7 +54,7 @@ const Header = () => {
                 width: "150px",
               }}
               className={`${isRes === 1 ? "text-xl" : ""} flex justify-center`}
-              type={isRes === 0 ? "text-white" : "text-black"}
+              type={`${isRes === 0 ? "text-white" : "text-black"} text`}
               to={item.to}
             >
               {item.title}
@@ -76,8 +74,8 @@ const Header = () => {
   return (
     <>
       <div className="w-full md:px-40">
-        <div className="flex justify-between">
-          <div className='flex'>
+        <div className="flex justify-between text-[#ce1910]">
+          <div className='flex '>
             <Button
               className="hidden sm:flex"
               animation="zoom"
@@ -134,7 +132,7 @@ const Header = () => {
           <div
             className={`${
               toggle ? "flex" : "hidden"
-            } p-6 bg-white absolute top-20 right-0 sm:right-[86px] mx-4 my-2
+            } p-6 bg-white absolute top-24 right-0 sm:right-[86px] mx-4 my-2
 								min-w-[140px] rounded-xl sidebar z-[100]`}
           >
             <ul>{renderItems(1)}</ul>

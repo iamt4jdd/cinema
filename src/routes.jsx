@@ -17,7 +17,7 @@ const publicRoutes = [
     { path: '/now-showing', component: NowShowing },
     { path: '/coming-soon', component: ComingSoon },
     { path: '/booking', component: Booking },
-    { path: '/movie', component: Movie },
+    { path: '/movie/:movieId', component: Movie },
 
 ]
 

@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { Button } from ".";
 
-const MovieRenderer = ({ image, title, genre, airtime, className }) => {
+const MovieRenderer = ({ image, title, genre, airtime, className, to }) => {
   const [hoverState, setHoverState] = useState(false);
 
   return (
@@ -19,7 +19,7 @@ const MovieRenderer = ({ image, title, genre, airtime, className }) => {
               <div
                 className={`absolute bottom-0 w-full bg-blur animate-appear`}
               >
-                <Button className="uppercase w-[100px] h-14" to="../movie">
+                <Button className="uppercase w-[100px] h-14" to={to}>
                   Booking
                 </Button>
               </div>
@@ -34,7 +34,7 @@ const MovieRenderer = ({ image, title, genre, airtime, className }) => {
               <h3 className="">Genre: {genre}</h3>
             </div>
             <div className="font-medium text-base">
-              <h3 className="">Airtime: {airtime}</h3>
+              <h3 className="">Airtime: {airtime} Min</h3>
             </div>
         </div>
       </div>

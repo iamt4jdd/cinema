@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import axios from "~/api/axios";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 
-import { Button, SliderRenderer } from "~/components";
+import { Button, SliderRenderer, DateTimeFormatter } from "~/components";
 import images from "~/assets/images";
 
 const DateButton = ({ date, weekday, month }) => {
@@ -21,12 +24,17 @@ const DateButton = ({ date, weekday, month }) => {
   );
 };
 
+
 const Movie = () => {
-  const [sliderRef, setSliderRef] = useState(null);
+  const [movies, setMovies] = useState();
+  const { movieId } = useParams();
 
   const [showForm, setShowForm] = useState(false);
+  const [sliderRef, setSliderRef] = useState(null);
 
   useEffect(() => {
+    axios.get(`/showtime/${movieId}`).then((res) => setMovies(res.data));
+
     const handleEsc = (event) => {
       if (event.keyCode === 27) {
         setShowForm(false);
@@ -38,58 +46,61 @@ const Movie = () => {
     return () => {
       window.removeEventListener("keydown", handleEsc);
     };
-  }, []);
+  }, [movieId]);
 
   return (
     <>
       <div className="">
-        <div
-          className="bg-dimBlack py-8"
-          style={{
-            backgroundImage: `linear-gradient(90deg, rgb(26, 26, 26) 24.97%, rgb(26, 26, 26) 40.3%,
-            rgba(26, 26, 26, 0.04) 97.47%, rgb(26, 26, 26) 100%), url(${images.tenet})`,
-            backgroundSize: "cover",
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center center",
-          }}
-        >
-          <div className="flex px-40">
-            <div className="flex flex-col w-[270px] h-[412px] rounded-lg bg-black">
-              <img
-                src={images.tenet}
-                alt="tenet"
-                className="h-full w-[full]  rounded-t-lg border-[1px] border-slate-700"
-              ></img>
-              <div className="text-center text-white py-1">In cinemas</div>
-            </div>
-            <div className="ml-14 mt-10">
-              <div className="text-white">
-                <h1 className="font-bold text-4xl">Tenet</h1>
-                <div className="my-4 font-bold text-lg">
-                  <FontAwesomeIcon
-                    icon={faThumbsUp}
-                    className="text-green-700 text-2xl"
-                  />
-                  <span className="text-2xl"> 22.5K</span>{" "}
-                  <span className="ml-2">are interested</span>
-                </div>
-                <div className="my-4 font-bold text-lg">
-                  2h 41m<span className="mx-3">•</span>Action, Science fiction
-                </div>
-                <div className="my-4 font-bold text-lg">
-                  Release on 28 Sep, 2023
-                </div>
+        {movies && (
+          <div
+            className="bg-dimBlack py-8"
+            style={{
+              backgroundImage: `linear-gradient(90deg, rgb(26, 26, 26) 24.97%, rgb(26, 26, 26) 40.3%,
+          rgba(26, 26, 26, 0.04) 97.47%, rgb(26, 26, 26) 100%), url(${images.tenet})`,
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center center",
+            }}
+          >
+            <div className="flex px-40">
+              <div className="flex flex-col w-[270px] h-[412px] rounded-lg bg-black">
+                <img
+                  src={images.tenet}
+                  alt="tenet"
+                  className="h-full w-[full]  rounded-t-lg border-[1px] border-slate-700"
+                ></img>
+                <div className="text-center text-white py-1">In cinemas</div>
               </div>
-              <Button
-                className="h-12 w-40"
-                animation="zoom"
-                onClick={() => setShowForm(true)}
-              >
-                Book tickets
-              </Button>
+              <div className="ml-14 mt-10">
+                <div className="text-white">
+                  <h1 className="font-bold text-4xl">{movies[0].title}</h1>
+                  <div className="my-4 font-bold text-lg">
+                    <FontAwesomeIcon
+                      icon={faThumbsUp}
+                      className="text-green-700 text-2xl"
+                    />
+                    <span className="text-2xl"> 22.5K</span>{" "}
+                    <span className="ml-2">are interested</span>
+                  </div>
+                  <div className="my-4 font-bold text-lg">
+                    2h 41m<span className="mx-3">•</span>
+                    {movies[0].genre}
+                  </div>
+                  <div className="my-4 font-bold text-lg">
+                    Release on {DateTimeFormatter.formatDate(movies[0].showingDate)}
+                  </div>
+                </div>
+                <Button
+                  className="h-12 w-40"
+                  animation="zoom"
+                  onClick={() => setShowForm(true)}
+                >
+                  Book tickets
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         <div className="pt-20">
           <div className="md:px-40">
@@ -137,29 +148,44 @@ const Movie = () => {
           <div className="w-full h-full bg-white p-2">
             <div className="relative flex items-center justify-center">
               <h1 className="uppercase text-center text-2xl">Booking online</h1>
-              
-              <FontAwesomeIcon icon={faClose} className="absolute right-5 text-2xl hover:text-red-600" onClick={() => setShowForm(false)}/>
+
+              <FontAwesomeIcon
+                icon={faClose}
+                className="absolute right-5 text-2xl hover:text-red-600"
+                onClick={() => setShowForm(false)}
+              />
             </div>
             <div className="grid grid-cols-10 gap-y-4 mt-4">
-                <DateButton date="01" weekday="Sun" month="10" />
-                <DateButton date="01" weekday="Sun" month="10" />
-                <DateButton date="01" weekday="Sun" month="10" />
-                <DateButton date="01" weekday="Sun" month="10" />
-                <DateButton date="01" weekday="Sun" month="10" />
-                <DateButton date="01" weekday="Sun" month="10" />
-                <DateButton date="01" weekday="Sun" month="10" />
-                <DateButton date="01" weekday="Sun" month="10" />
-                <DateButton date="01" weekday="Sun" month="10" />
-                <DateButton date="01" weekday="Sun" month="10" />
-                <DateButton date="01" weekday="Sun" month="10" />
-                <DateButton date="01" weekday="Sun" month="10" />
-                <DateButton date="01" weekday="Sun" month="10" />
-                <DateButton date="01" weekday="Sun" month="10" />
+              {movies.map((movie) => {
+
+                const date = movie.showingDate.slice(7, 9)
+                const weekday = movie.showingDate.slice(0, 4)
+                const month = movie.showingDate.slice(4, 6)
+
+                console.log(date, weekday, month)
+
+                return <DateButton key={movie.showTimeId} date={date} weekday={weekday} month={month}/>
+                  
+              })
+
+              }
+              <DateButton date="01" weekday="Sun" month="10" />
+              <DateButton date="01" weekday="Sun" month="10" />
+              <DateButton date="01" weekday="Sun" month="10" />
+              <DateButton date="01" weekday="Sun" month="10" />
+              <DateButton date="01" weekday="Sun" month="10" />
+              <DateButton date="01" weekday="Sun" month="10" />
+              <DateButton date="01" weekday="Sun" month="10" />
+              <DateButton date="01" weekday="Sun" month="10" />
+              <DateButton date="01" weekday="Sun" month="10" />
+              <DateButton date="01" weekday="Sun" month="10" />
+              <DateButton date="01" weekday="Sun" month="10" />
+              <DateButton date="01" weekday="Sun" month="10" />
+              <DateButton date="01" weekday="Sun" month="10" />
+              <DateButton date="01" weekday="Sun" month="10" />
             </div>
             <div className="mb-6 border-b-2 border-gray-700">&nbsp;</div>
-            <div className="Time">
-                asdadsas
-            </div>
+            <div className="Time">asdadsas</div>
           </div>
         </div>
       )}

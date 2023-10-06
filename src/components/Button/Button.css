@@ -57,7 +57,6 @@
     justify-content: flex-start;
     padding: 8px;
     margin: 0 10px;
-    color: #e71a0f;
     
 }
 
@@ -66,45 +65,10 @@
 }
 
 
-.text-white {
-    border-radius: 0;
-    font-weight: 600;
-    font-size: .9em;
-    text-transform: uppercase;
-    line-height: 16px;
-    letter-spacing: -0.028px;
-    min-width: 1px;
-    justify-content: flex-start;
-    padding: 8px;
-    margin: 0 10px;
-    color: #e71a0f;
-    
-}
-
-.text-black {
-    border-radius: 0;
-    font-weight: 600;
-    font-size: .9em;
-    text-transform: uppercase;
-    line-height: 16px;
-    letter-spacing: -0.028px;
-    min-width: 1px;
-    justify-content: flex-start;
-    padding: 8px;
-    margin: 0 10px;
-    color: #e71a0f;
-    
-}
-
 .text:hover {
     animation: sparkleAnimation 1s infinite;
 }
-.text-white:hover {
-    animation: sparkleAnimation 1s infinite;
-}
-.text-black:hover {
-    animation: sparkleAnimation 1s infinite;
-}
+
 
 .text-white:focus {
     color: red;

@@ -3,60 +3,8 @@ import axios from "~/api/axios";
 
 
 import { ShowTimeRenderer } from "~/components";
-// import images from "~/assets/images";
 
-// const MOVIE_ITEM = [
-//   {
-//     title: "telnet",
-//     image: images.tenet,
-//     genre: "Action",
-//     airtime: "30",
-//   },
-//   {
-//     title: "telnet",
-//     image: images.tenet,
-//     genre: "Action",
-//     airtime: "30",
-//   },
-//   {
-//     title: "telnet",
-//     image: images.tenet,
-//     genre: "Action",
-//     airtime: "30",
-//   },
-//   {
-//     title: "telnet",
-//     image: images.tenet,
-//     genre: "Action",
-//     airtime: "30",
-//   },
-//   {
-//     title: "telnet",
-//     image: images.tenet,
-//     genre: "Action",
-//     airtime: "30",
-//   },
-//   {
-//     title: "telnet",
-//     image: images.tenet,
-//     genre: "Action",
-//     airtime: "30",
-//   },
-//   {
-//     title: "telnet",
-//     image: images.tenet,
-//     genre: "Action",
-//     airtime: "30",
-//   },
-//   {
-//     title: "telnet",
-//     image: images.tenet,
-//     genre: "Action",
-//     airtime: "30",
-//   },
-// ];
-
-const NowShowing = () => {
+const ComingSoon = () => {
 
   const [comingSoon, setComingSoon] = useState([])
 
@@ -65,7 +13,7 @@ const NowShowing = () => {
   useEffect(() => {
 
     axios
-    .get('/showtime/now')
+    .get('/showtime/coming')
     .then((res) => setComingSoon(res.data))
 
   }, [])
@@ -86,4 +34,4 @@ const NowShowing = () => {
   );
 };
 
-export default NowShowing;
+export default ComingSoon;

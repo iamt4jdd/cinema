@@ -1,66 +1,11 @@
 import { useState, useEffect } from "react";
 import axios from "~/api/axios";
 
-
 import { ShowTimeRenderer } from "~/components";
-// import images from "~/assets/images";
-
-// const MOVIE_ITEM = [
-//   {
-//     title: "telnet",
-//     image: images.tenet,
-//     genre: "Action",
-//     airtime: "30",
-//   },
-//   {
-//     title: "telnet",
-//     image: images.tenet,
-//     genre: "Action",
-//     airtime: "30",
-//   },
-//   {
-//     title: "telnet",
-//     image: images.tenet,
-//     genre: "Action",
-//     airtime: "30",
-//   },
-//   {
-//     title: "telnet",
-//     image: images.tenet,
-//     genre: "Action",
-//     airtime: "30",
-//   },
-//   {
-//     title: "telnet",
-//     image: images.tenet,
-//     genre: "Action",
-//     airtime: "30",
-//   },
-//   {
-//     title: "telnet",
-//     image: images.tenet,
-//     genre: "Action",
-//     airtime: "30",
-//   },
-//   {
-//     title: "telnet",
-//     image: images.tenet,
-//     genre: "Action",
-//     airtime: "30",
-//   },
-//   {
-//     title: "telnet",
-//     image: images.tenet,
-//     genre: "Action",
-//     airtime: "30",
-//   },
-// ];
 
 const NowShowing = () => {
 
   const [nowShowTime, setNowShowTime] = useState([])
-
-
 
   useEffect(() => {
 
@@ -70,8 +15,6 @@ const NowShowing = () => {
 
   }, [])
   
-
-
   return (
     <div className="md:px-40 py-8">
       <div>

@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
-import { AuthProvider } from "./authContext.jsx";
+import { Provider } from "./Context"
 import "./input.css";
 
 const loadingMarkup = (
@@ -11,11 +11,11 @@ const loadingMarkup = (
 );
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <Suspense fallblack={loadingMarkup}>
+  <Suspense fallback={loadingMarkup}>
     <React.StrictMode>
-      <AuthProvider>
+      <Provider>
         <App />
-      </AuthProvider>
+      </Provider>
     </React.StrictMode>
   </Suspense>
 );

@@ -1,6 +1,6 @@
 import { useState, useContext , useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import AuthContext from "~/authContext";
+import { Context } from "~/Context";
 import axios from "~/api/axios";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -48,7 +48,7 @@ import { Button } from "~/components";
   const Login = () => {
 
     const navigate = useNavigate()
-    const { setAuth } = useContext(AuthContext);
+    const { setAuth } = useContext(Context);
     const [pageType, setPageType] = useState("login")
     const [message, setMessage] = useState('')
     const [notificationState, setNotificationState] = useState({ color: 'red-400', icon: faCircleXmark, })

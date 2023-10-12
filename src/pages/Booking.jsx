@@ -1,6 +1,6 @@
-import AuthContext from "~/authContext";
-import { useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+// import AuthContext from "~/Context/Context";
+// import { useContext, useEffect } from "react";
+// import { useNavigate } from "react-router-dom";
 
 
 const Note = ({ color, content, letter }) => {
@@ -18,15 +18,15 @@ const Note = ({ color, content, letter }) => {
 
 const Booking = () => {
 
-  const { auth } = useContext(AuthContext);
-  const navigate = useNavigate()
+  // const { auth } = useContext(AuthContext);
+  // const navigate = useNavigate()
 
-  useEffect(() => {
-    console.log(auth)
-    if (!auth) {
-      navigate('/login');
-    }
-  }, [auth, navigate])
+  // useEffect(() => {
+  //   console.log(auth)
+  //   if (!auth) {
+  //     navigate('/login');
+  //   }
+  // }, [auth, navigate])
 
   return (
     <div className="px-40 py-20">

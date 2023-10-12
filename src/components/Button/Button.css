@@ -69,6 +69,10 @@
     animation: sparkleAnimation 1s infinite;
 }
 
+.text:focus {
+    color: red;
+}
+
 
 .text-white:focus {
     color: red;

@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
+import { Context } from "~/Context";
 import axios from "~/api/axios";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,25 +9,30 @@ import { faClose, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { Button, SliderRenderer, DateTimeFormatter } from "~/components";
 import images from "~/assets/images";
 
-const DateButton = ({ date, weekday, month }) => {
+const DateButton = ({ date, weekday, month, onClick }) => {
   return (
-    <div className="flex">
-      <Button type="text" animation="zoom" className="border-red-300 border-2 ">
-        <div className="grid grid-cols-2">
-          <div className="grid grid-rows-2">
-            <span className="flex flex-start">{month}</span>
-            <em className="flex flex-start">{weekday}</em>
-          </div>
-          <strong className="text-4xl">{date}</strong>
+    <Button
+      type="text"
+      animation="zoom"
+      className="border-red-300 border-2"
+      onClick={onClick}
+    >
+      <div className="grid grid-cols-2">
+        <div className="grid grid-rows-2">
+          <span className="flex flex-start">{month}</span>
+          <em className="flex flex-start">{weekday}</em>
         </div>
-      </Button>
-    </div>
+        <strong className="text-4xl">{date}</strong>
+      </div>
+    </Button>
   );
 };
 
-
 const Movie = () => {
+  const { movie } = useContext(Context);
+
   const [movies, setMovies] = useState();
+  const [showTimes, setShowTimes] = useState();
   const { movieId } = useParams();
 
   const [showForm, setShowForm] = useState(false);
@@ -48,6 +54,22 @@ const Movie = () => {
     };
   }, [movieId]);
 
+  const handleDateButtonClick = (date) => {
+    const moviesWithDate = movies.filter((movie) =>
+      movie.showingDate.includes(date)
+    );
+
+    if (moviesWithDate.length > 0) {
+      const showTimesData = moviesWithDate.map((movie) => ({
+        showTimeId: movie.showTimeId,
+        startTime: movie.startTime,
+      }));
+      setShowTimes(showTimesData);
+    } else {
+      setShowTimes("No movies found for this date.");
+    }
+  };
+
   return (
     <>
       <div className="">
@@ -65,7 +87,7 @@ const Movie = () => {
             <div className="flex px-40">
               <div className="flex flex-col w-[270px] h-[412px] rounded-lg bg-black">
                 <img
-                  src={images.tenet}
+                  src={movie.image}
                   alt="tenet"
                   className="h-full w-[full]  rounded-t-lg border-[1px] border-slate-700"
                 ></img>
@@ -73,7 +95,7 @@ const Movie = () => {
               </div>
               <div className="ml-14 mt-10">
                 <div className="text-white">
-                  <h1 className="font-bold text-4xl">{movies[0].title}</h1>
+                  <h1 className="font-bold text-4xl">{movie.title}</h1>
                   <div className="my-4 font-bold text-lg">
                     <FontAwesomeIcon
                       icon={faThumbsUp}
@@ -84,10 +106,11 @@ const Movie = () => {
                   </div>
                   <div className="my-4 font-bold text-lg">
                     2h 41m<span className="mx-3">•</span>
-                    {movies[0].genre}
+                    {movie.genre}
                   </div>
                   <div className="my-4 font-bold text-lg">
-                    Release on {DateTimeFormatter.formatDate(movies[0].showingDate)}
+                    Release on{" "}
+                    {DateTimeFormatter.formatDate(movies[0].showingDate)}
                   </div>
                 </div>
                 <Button
@@ -156,36 +179,47 @@ const Movie = () => {
               />
             </div>
             <div className="grid grid-cols-10 gap-y-4 mt-4">
-              {movies.map((movie) => {
+              {[...new Set(movies.map((movie) => movie.showingDate))]
+                .sort((a, b) => a.localeCompare(b))
+                .map((date) => {
+                  const dateParts = date.split("-");
+                  const year = dateParts[0];
+                  const month = dateParts[1];
+                  const day = dateParts[2];
+                  const weekday = DateTimeFormatter.getDayOfWeek(date);
 
-                const date = movie.showingDate.slice(7, 9)
-                const weekday = movie.showingDate.slice(0, 4)
-                const month = movie.showingDate.slice(4, 6)
-
-                console.log(date, weekday, month)
-
-                return <DateButton key={movie.showTimeId} date={date} weekday={weekday} month={month}/>
-                  
-              })
-
-              }
-              <DateButton date="01" weekday="Sun" month="10" />
-              <DateButton date="01" weekday="Sun" month="10" />
-              <DateButton date="01" weekday="Sun" month="10" />
-              <DateButton date="01" weekday="Sun" month="10" />
-              <DateButton date="01" weekday="Sun" month="10" />
-              <DateButton date="01" weekday="Sun" month="10" />
-              <DateButton date="01" weekday="Sun" month="10" />
-              <DateButton date="01" weekday="Sun" month="10" />
-              <DateButton date="01" weekday="Sun" month="10" />
-              <DateButton date="01" weekday="Sun" month="10" />
-              <DateButton date="01" weekday="Sun" month="10" />
-              <DateButton date="01" weekday="Sun" month="10" />
-              <DateButton date="01" weekday="Sun" month="10" />
-              <DateButton date="01" weekday="Sun" month="10" />
+                  return (
+                    <DateButton
+                      key={date}
+                      date={day}
+                      weekday={weekday}
+                      month={month}
+                      year={year}
+                      onClick={() => handleDateButtonClick(date)}
+                    />
+                  );
+                })}
             </div>
             <div className="mb-6 border-b-2 border-gray-700">&nbsp;</div>
-            <div className="Time">asdadsas</div>
+            <p className="p-3 font-bold text-xl">2D VietSub</p>
+            <div className="flex justify-left">
+              {showTimes &&
+                showTimes
+                  .sort((a, b) => {
+                    const timeA = DateTimeFormatter.timeStringToMinutes(a.startTime);
+                    const timeB = DateTimeFormatter.timeStringToMinutes(b.startTime);
+                    return timeA - timeB;
+                  })
+                  .map(({ showTimeId, startTime }) => (
+                    <Button
+                      key={showTimeId}
+                      type="text border-gray-300 border-2 text-lg w-24 justify-center"
+                      to={`/booking/${showTimeId}`}
+                    >
+                      {startTime.slice(0, 5)}
+                    </Button>
+                  ))}
+            </div>
           </div>
         </div>
       )}

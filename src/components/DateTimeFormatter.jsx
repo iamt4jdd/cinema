@@ -10,6 +10,15 @@ const formatDate = (inputDate) => {
     return new Date(inputDate).toLocaleDateString('en-US', options);
 }
 
+const getDayOfWeek = (inputDate) => {
+    const date = new Date(inputDate);
+    const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    return daysOfWeek[date.getUTCDay()];
+}
 
-export default { timeStringToMinutes, formatDate }
+
+
+
+
+export default { timeStringToMinutes, formatDate, getDayOfWeek,}
 

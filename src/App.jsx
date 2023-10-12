@@ -42,6 +42,8 @@ function App() {
               {publicRoutes.map((route, index) => {
                 let Page = route.component;
 
+                let Provider = route.provider ?? "div";
+
                 let Layout = DefaultLayout;
 
                 if (route.layout) {
@@ -55,7 +57,9 @@ function App() {
                     path={route.path}
                     element={
                       <Layout>
-                        <Page />
+                        <Provider>
+                          <Page />
+                        </Provider>
                       </Layout>
                     }
                   />

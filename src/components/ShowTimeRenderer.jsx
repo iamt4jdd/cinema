@@ -11,7 +11,8 @@ const ShowTimeRenderer = ({item}) => {
           image={`http://localhost:5555/public/assets/${item.thumbnail}`}
           title={item.title} 
           genre={item.genre}
-          airtime={runTime}
+          cost={item.cost}
+          runTime={runTime}
           to={`/movie/${item.movieId}`}
           className=''
         />

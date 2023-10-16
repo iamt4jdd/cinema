@@ -53,7 +53,7 @@ const Header = () => {
                 fontFamily: "Manrope",
                 width: "150px",
               }}
-              className={`${isRes === 1 ? "text-xl" : ""} flex justify-center`}
+              className={`${isRes === 1 ? "text-xl" : ""} flex justify-center focus:text-[#e71a0f]`}
               type={`${isRes === 0 ? "text-white" : "text-black"} text`}
               to={item.to}
             >

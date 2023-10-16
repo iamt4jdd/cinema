@@ -70,12 +70,7 @@
 }
 
 .text:focus {
-    color: red;
-}
-
-
-.text-white:focus {
-    color: red;
+    color: #e71a0f;
 }
 
 @keyframes sparkleAnimation {

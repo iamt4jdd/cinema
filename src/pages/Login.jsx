@@ -11,21 +11,10 @@ import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import images from "~/assets/images";
 import { Button } from "~/components";
 
-  const initialRegister = {
-    username: "",
-    password: "",
-    email: "",
-    nickname: ""
-  };
 
-  const initialLogin = {
-    email: "",
-    password: "",
-  };
-
-  const USER_URL = "/user"
 
   const TextField = ({ title, inputRef, event, value = '', type }) => {
+    
     return (
       <>
         <div className="mb-4">
@@ -47,6 +36,20 @@ import { Button } from "~/components";
 
   const Login = () => {
 
+    const initialRegister = {
+      username: "",
+      password: "",
+      email: "",
+      nickname: ""
+    };
+  
+    const initialLogin = {
+      email: "",
+      password: "",
+    };
+  
+    const USER_URL = "/user"
+    
     const navigate = useNavigate()
     const { setAuth } = useContext(Context);
     const [pageType, setPageType] = useState("login")
@@ -129,7 +132,7 @@ import { Button } from "~/components";
             // console.log(password)
             // console.log(accessToken)
             setAuth({email, password, accessToken});
-            navigate('/booking')
+            navigate('/booking/')
           }
           
         } else if (isRegister) {

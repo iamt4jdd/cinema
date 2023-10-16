@@ -18,7 +18,7 @@ const DateButton = ({ date, weekday, month, onClick }) => {
       onClick={onClick}
     >
       <div className="grid grid-cols-2">
-        <div className="grid grid-rows-2">
+        <div className="grid grid-rows-2"> 
           <span className="flex flex-start">{month}</span>
           <em className="flex flex-start">{weekday}</em>
         </div>
@@ -28,10 +28,80 @@ const DateButton = ({ date, weekday, month, onClick }) => {
   );
 };
 
+
+
+
+const BookingForm = ({showForm, setShowForm, showTimes, movies, handleDateButtonClick}) => {
+
+  const { setShowTimeData } = useContext(Context);
+
+  return (
+    showForm && (
+      <div className="fixed top-0 left-0 w-full h-full px-24 py-14 bg-blur z-[999]">
+        <div className="w-full h-full bg-white p-2">
+          <div className="relative flex items-center justify-center">
+            <h1 className="uppercase text-center text-2xl">Booking online</h1>
+
+            <FontAwesomeIcon
+              icon={faClose}
+              className="absolute right-5 text-2xl hover:text-red-600"
+              onClick={() => setShowForm(false)}
+            />
+          </div>
+          <div className="grid grid-cols-10 gap-y-4 mt-4">
+            {[...new Set(movies.map((movie) => movie.showingDate))]
+              .sort((a, b) => a.localeCompare(b))
+              .map((date) => {
+                const dateParts = date.split("-");
+                const year = dateParts[0];
+                const month = dateParts[1];
+                const day = dateParts[2];
+                const weekday = DateTimeFormatter.getDayOfWeek(date);
+
+                return (
+                  <DateButton
+                    key={date}
+                    date={day}
+                    weekday={weekday}
+                    month={month}
+                    year={year}
+                    onClick={() => handleDateButtonClick(date)}
+                  />
+                );
+              })}
+          </div>
+          <div className="mb-6 border-b-2 border-gray-700">&nbsp;</div>
+          <p className="p-3 font-bold text-xl">2D VietSub</p>
+          <div className="flex justify-left">
+            {showTimes &&
+              showTimes
+                .sort((a, b) => {
+                  const timeA = DateTimeFormatter.timeStringToMinutes(a.startTime);
+                  const timeB = DateTimeFormatter.timeStringToMinutes(b.startTime);
+                  return timeA - timeB;
+                })
+                .map(({showTimeId, showingDate, startTime}) => (
+                  <Button
+                    key={showTimeId}
+                    type="text border-gray-300 border-2 text-lg w-24 justify-center"
+                    to={`/booking/${showTimeId}`}
+                    onClick = {() => setShowTimeData({showTimeId: showTimeId, showingDate: showingDate, startTime: startTime})}
+                  >
+                    {startTime.slice(0, 5)}
+                  </Button>
+                ))}
+          </div>
+        </div>
+      </div>
+    )
+  )
+}
+
 const Movie = () => {
   const { movie } = useContext(Context);
 
-  const [movies, setMovies] = useState();
+
+  const [movies, setMovies] = useState(null);
   const [showTimes, setShowTimes] = useState();
   const { movieId } = useParams();
 
@@ -39,6 +109,7 @@ const Movie = () => {
   const [sliderRef, setSliderRef] = useState(null);
 
   useEffect(() => {
+
     axios.get(`/showtime/${movieId}`).then((res) => setMovies(res.data));
 
     const handleEsc = (event) => {
@@ -46,13 +117,15 @@ const Movie = () => {
         setShowForm(false);
       }
     };
-
+  
     window.addEventListener("keydown", handleEsc);
 
     return () => {
       window.removeEventListener("keydown", handleEsc);
     };
-  }, [movieId]);
+  }, [movieId, movie]);
+
+  console.log(movies)
 
   const handleDateButtonClick = (date) => {
     const moviesWithDate = movies.filter((movie) =>
@@ -62,6 +135,7 @@ const Movie = () => {
     if (moviesWithDate.length > 0) {
       const showTimesData = moviesWithDate.map((movie) => ({
         showTimeId: movie.showTimeId,
+        showingDate: movie.showingDate,
         startTime: movie.startTime,
       }));
       setShowTimes(showTimesData);
@@ -105,7 +179,7 @@ const Movie = () => {
                     <span className="ml-2">are interested</span>
                   </div>
                   <div className="my-4 font-bold text-lg">
-                    2h 41m<span className="mx-3">•</span>
+                    {DateTimeFormatter.minutesToHours(movie.runTime)}<span className="mx-3">•</span>
                     {movie.genre}
                   </div>
                   <div className="my-4 font-bold text-lg">
@@ -166,63 +240,15 @@ const Movie = () => {
         </div>
       </div>
 
-      {showForm && (
-        <div className="fixed top-0 left-0 w-full h-full px-24 py-14 bg-blur z-[999]">
-          <div className="w-full h-full bg-white p-2">
-            <div className="relative flex items-center justify-center">
-              <h1 className="uppercase text-center text-2xl">Booking online</h1>
 
-              <FontAwesomeIcon
-                icon={faClose}
-                className="absolute right-5 text-2xl hover:text-red-600"
-                onClick={() => setShowForm(false)}
-              />
-            </div>
-            <div className="grid grid-cols-10 gap-y-4 mt-4">
-              {[...new Set(movies.map((movie) => movie.showingDate))]
-                .sort((a, b) => a.localeCompare(b))
-                .map((date) => {
-                  const dateParts = date.split("-");
-                  const year = dateParts[0];
-                  const month = dateParts[1];
-                  const day = dateParts[2];
-                  const weekday = DateTimeFormatter.getDayOfWeek(date);
+      <BookingForm
+        showForm={showForm}
+        setShowForm={setShowForm}
+        showTimes={showTimes}
+        movies={movies}
+        handleDateButtonClick={handleDateButtonClick}
+      />
 
-                  return (
-                    <DateButton
-                      key={date}
-                      date={day}
-                      weekday={weekday}
-                      month={month}
-                      year={year}
-                      onClick={() => handleDateButtonClick(date)}
-                    />
-                  );
-                })}
-            </div>
-            <div className="mb-6 border-b-2 border-gray-700">&nbsp;</div>
-            <p className="p-3 font-bold text-xl">2D VietSub</p>
-            <div className="flex justify-left">
-              {showTimes &&
-                showTimes
-                  .sort((a, b) => {
-                    const timeA = DateTimeFormatter.timeStringToMinutes(a.startTime);
-                    const timeB = DateTimeFormatter.timeStringToMinutes(b.startTime);
-                    return timeA - timeB;
-                  })
-                  .map(({ showTimeId, startTime }) => (
-                    <Button
-                      key={showTimeId}
-                      type="text border-gray-300 border-2 text-lg w-24 justify-center"
-                      to={`/booking/${showTimeId}`}
-                    >
-                      {startTime.slice(0, 5)}
-                    </Button>
-                  ))}
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 };

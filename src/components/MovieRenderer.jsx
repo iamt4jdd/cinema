@@ -3,7 +3,7 @@ import { Context } from "~/Context";
 
 import { Button } from ".";
 
-const MovieRenderer = ({ image, title, genre, airtime, className, to, }) => {
+const MovieRenderer = ({ image, title, genre, runTime, cost, className, to, }) => {
   const [hoverState, setHoverState] = useState(false);
   const { setMovie } = useContext(Context)
 
@@ -21,7 +21,7 @@ const MovieRenderer = ({ image, title, genre, airtime, className, to, }) => {
               <div
                 className={`absolute bottom-0 w-full bg-blur animate-appear`}
               >
-                <Button className="uppercase w-[100px] h-14" to={to} onClick={() => setMovie({image: image, title: title, genre: genre})}>
+                <Button className="uppercase w-[100px] h-14" to={to} onClick={() => setMovie({image, title, genre, runTime, cost})}>
                   Booking
                 </Button>
               </div>
@@ -36,7 +36,7 @@ const MovieRenderer = ({ image, title, genre, airtime, className, to, }) => {
               <h3 className="">Genre: {genre}</h3>
             </div>
             <div className="font-medium text-base">
-              <h3 className="">Airtime: {airtime} Min</h3>
+              <h3 className="">Airtime: {runTime} Min</h3>
             </div>
         </div>
       </div>

@@ -16,9 +16,15 @@ const getDayOfWeek = (inputDate) => {
     return daysOfWeek[date.getUTCDay()];
 }
 
+const minutesToHours = (minutes) => {
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+
+    return `${hours}h ${remainingMinutes}m`
+}
 
 
 
 
-export default { timeStringToMinutes, formatDate, getDayOfWeek,}
+export default { timeStringToMinutes, formatDate, getDayOfWeek, minutesToHours}
 

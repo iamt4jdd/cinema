@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faNewspaper, faUser } from "@fortawesome/free-regular-svg-icons";
-import { faTicket } from "@fortawesome/free-solid-svg-icons";
+import { faMoneyCheckDollar, faTicket } from "@fortawesome/free-solid-svg-icons";
 import { useLocation, Link } from "react-router-dom";
+
+import axios from "~/api/axios";
+import { useSelector } from "~/hooks";
 
 import { Button, CarouselRenderer } from "~/components";
 import images from "~/assets/images";
@@ -23,21 +26,44 @@ const NAV_ITEM = [
 ];
 
 const Header = () => {
-  const [toggle, setToggle] = useState(false);
-  //   const [isScroll, setIsScroll] = useState(false);
-
-  //   useEffect(() => {
-  //     const handleScroll = () => {
-  //       window.scrollY > 700 ? setIsScroll(true) : setIsScroll(false);
-  //     };
-  //     window.addEventListener("scroll", handleScroll);
-
-  //     return () => {
-  //       window.removeEventListener("scroll", handleScroll);
-  //     };
-  //   }, []);
 
   const location = useLocation();
+  const [toggle, setToggle] = useState(false);
+  
+  const { auth } = useSelector()
+  const [user, setUser] = useState({})
+
+  useEffect(() => {
+    
+    let isMounted = true
+    const controller = new AbortController()
+    
+    const getUser = async () => {
+      try {
+        if(auth) {
+          const response = await axios.get(`/user/${auth.accountId}`, {
+            signal: controller.signal,
+          })
+
+          console.log(response.data)
+          
+          isMounted && setUser(response.data)
+        }
+      }
+      catch(error) {
+        console.error(error)
+      }
+    }
+
+    getUser()
+
+    return () => {
+      isMounted = false
+      controller.abort()
+    }
+
+  }, [auth])
+
 
   const renderItems = (isRes) => {
     return NAV_ITEM.map((item, index) => {
@@ -93,6 +119,28 @@ const Header = () => {
               MY TICKETS
             </Button>
           </div>
+          {user?.email ?
+          (
+            <div className="flex space-x-2">
+               <Button
+                className="pointer-events-none"
+                animation="zoom"
+                type="text"
+                icon={<FontAwesomeIcon icon={faMoneyCheckDollar} />}
+              >
+                {user.balance.toLocaleString("en-US").replace(/,/g, ".")}
+                <span className="ml-0.5">₫</span>
+              </Button>
+              <div className="p-1 min-w-[92px]">
+                <div className="border-2 px-2 shadow-md border-red-500 text-center">
+                  {user.nickname}
+                </div>
+              </div>
+            </div>
+            
+          )
+          :
+          (
           <Button
             className=""
             animation="zoom"
@@ -102,6 +150,9 @@ const Header = () => {
           >
             ACCOUNT
           </Button>
+          )
+
+          }
         </div>
       </div>
 

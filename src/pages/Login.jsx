@@ -1,6 +1,6 @@
-import { useState, useContext , useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { Context } from "~/Context";
+import { useState , useRef, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useSelector } from "~/hooks";
 import axios from "~/api/axios";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -50,11 +50,16 @@ import { Button } from "~/components";
   
     const USER_URL = "/user"
     
+    const { setAuth } = useSelector()
     const navigate = useNavigate()
-    const { setAuth } = useContext(Context);
+    const location = useLocation()
+    const from = location?.state?.from?.pathname || "/";
+
+
+
     const [pageType, setPageType] = useState("login")
     const [message, setMessage] = useState('')
-    const [notificationState, setNotificationState] = useState({ color: 'red-400', icon: faCircleXmark, })
+    const [notificationState, setNotificationState] = useState({})
 
     const usernameRef = useRef(null)
     const passwordRef = useRef(null)
@@ -96,18 +101,14 @@ import { Button } from "~/components";
       e.preventDefault(); 
 
       const handleNotificationState = (response, stateHandler, initialState) => {
-
         if(response?.data?.accountId != undefined) {
-            
           setNotificationState({
-            color: 'green-400',
+            color: 'rgb(74 222 128)',
             icon: faInfoCircle
           })
-
           stateHandler(initialState)
-
-        } else setNotificationState({ color: 'red-400', icon: faCircleXmark, })
-
+        } 
+        else setNotificationState({ color: 'rgb(248 113 113)', icon: faCircleXmark, })
       }
     
       try {
@@ -116,23 +117,20 @@ import { Button } from "~/components";
           const loggedInResponse = await axios.post(USER_URL + '/login', JSON.stringify(loginData), {
             headers: { "Content-Type": "application/json" },
           });
-
           
           setMessage(loggedInResponse?.data?.message);
         
-        
-      
           handleNotificationState(loggedInResponse, setLoginData, initialLogin);
 
           if(loggedInResponse?.data?.accountId != undefined) {
             const accessToken = loggedInResponse?.data?.token;
+            const accountId = loggedInResponse?.data?.accountId;
             const email = loginData?.email
-            const password = loginData?.password
             // console.log(email)
             // console.log(password)
             // console.log(accessToken)
-            setAuth({email, password, accessToken});
-            navigate('/booking/')
+            setAuth({email, accountId, accessToken});
+            navigate(from, { replace: true });
           }
           
         } else if (isRegister) {
@@ -152,7 +150,6 @@ import { Button } from "~/components";
     useEffect(() => {
       if (message) {
         const notificationElement = document.querySelector('.animate-notification');
-
         const timeout = setTimeout(() => {
           notificationElement.style.display = 'none';
           setMessage('')
@@ -166,10 +163,10 @@ import { Button } from "~/components";
     return (
       <>
         {message && 
-        <div className={`fixed flex right-2 top-40 w-72 bg-black h-16 animate-notification items-center z-[10000]`}>
-          <span className="mx-auto text-white">{message}</span>
-          <FontAwesomeIcon icon={notificationState.icon} className={`${'text-' + notificationState.color} text-xl`}/>
-          <div className={`h-full w-2 ${'bg-' + notificationState.color} ml-4`}>&nbsp;</div>
+        <div className={`pl-2 fixed flex right-2 top-40 w-60 bg-black h-16 animate-notification items-center z-[10000]`}>
+          <span className="w-full text-white">{message}</span>
+          <FontAwesomeIcon icon={notificationState.icon} style={{ color: notificationState.color}} className='text-xl'/>
+          <div style={{ backgroundColor: notificationState.color}} className='h-full w-2 ml-2'>&nbsp;</div>
         </div>} 
         <div className="container pt-12 md:pt-24 md:mx-40 flex flex-wrap flex-col md:flex-row items-center">
           <div className="flex flex-col w-full xl:w-2/5 justify-center lg:items-start overflow-y-hidden">

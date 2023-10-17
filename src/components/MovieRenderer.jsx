@@ -1,11 +1,11 @@
-import { useState, useContext } from "react";
-import { Context } from "~/Context";
+import { useState } from "react";
+import { useSelector } from "~/hooks";
 
 import { Button } from ".";
 
 const MovieRenderer = ({ image, title, genre, runTime, cost, className, to, }) => {
   const [hoverState, setHoverState] = useState(false);
-  const { setMovie } = useContext(Context)
+  const { setMovie } = useSelector()
 
   return (
     <>

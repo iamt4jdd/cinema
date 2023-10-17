@@ -1,8 +1,13 @@
-import { useCallback, useEffect, Fragment } from 'react'
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
-import { publicRoutes } from './routes'
-import { DefaultLayout } from './layouts';
-
+import { useCallback, useEffect, Fragment } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
+import { publicRoutes, privateRoutes } from "./routes";
+import { DefaultLayout } from "./layouts";
+import { RequireAuth } from "./components";
 
 const debounce = (func, delay) => {
   let timer;
@@ -15,7 +20,7 @@ const debounce = (func, delay) => {
 };
 
 const ScrollToTop = () => {
-  const { pathName = '' } = useLocation();
+  const { pathName = "" } = useLocation();
 
   const smoothScrollToTop = useCallback(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -35,11 +40,38 @@ const ScrollToTop = () => {
 function App() {
   return (
     <>
-        <Router>
-          <ScrollToTop />
-          <div className="w-full overflow-hidden">
-            <Routes>
-              {publicRoutes.map((route, index) => {
+      <Router>
+        <ScrollToTop />
+        <div className="w-full overflow-hidden">
+          <Routes>
+            {publicRoutes.map((route, index) => {
+              let Page = route.component;
+
+              let Provider = route.provider ?? "div";
+
+              let Layout = DefaultLayout;
+
+              if (route.layout) {
+                Layout = route.layout;
+              } else if (route.layout === null) {
+                Layout = Fragment;
+              }
+              return (
+                <Route
+                  key={index}
+                  path={route.path}
+                  element={
+                    <Layout>
+                      <Provider>
+                        <Page />
+                      </Provider>
+                    </Layout>
+                  }
+                />
+              );
+            })}
+            <Route element={<RequireAuth />}>
+              {privateRoutes.map((route, index) => {
                 let Page = route.component;
 
                 let Provider = route.provider ?? "div";
@@ -65,9 +97,10 @@ function App() {
                   />
                 );
               })}
-            </Routes>
-          </div>
-        </Router>
+            </Route>
+          </Routes>
+        </div>
+      </Router>
     </>
   );
 }

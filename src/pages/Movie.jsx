@@ -1,6 +1,6 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Context } from "~/Context";
+import { useSelector } from "~/hooks";
 import axios from "~/api/axios";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -33,7 +33,7 @@ const DateButton = ({ date, weekday, month, onClick }) => {
 
 const BookingForm = ({showForm, setShowForm, showTimes, movies, handleDateButtonClick}) => {
 
-  const { setShowTimeData } = useContext(Context);
+  const { setShowTimeData } = useSelector()
 
   return (
     showForm && (
@@ -98,8 +98,7 @@ const BookingForm = ({showForm, setShowForm, showTimes, movies, handleDateButton
 }
 
 const Movie = () => {
-  const { movie } = useContext(Context);
-
+  const { movie } = useSelector()
 
   const [movies, setMovies] = useState(null);
   const [showTimes, setShowTimes] = useState();
@@ -125,7 +124,6 @@ const Movie = () => {
     };
   }, [movieId, movie]);
 
-  console.log(movies)
 
   const handleDateButtonClick = (date) => {
     const moviesWithDate = movies.filter((movie) =>

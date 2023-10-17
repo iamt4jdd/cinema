@@ -1,14 +1,9 @@
-// import AuthContext from "~/Context/Context";
-import { useEffect, useState, useContext } from "react";
-// import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "~/api/axios";
-import { Context } from "~/Context";
+import { useSelector } from "~/hooks";
 import { DateTimeFormatter } from "~/components";
 import { Button } from "~/components";
-// type Seats = {
-//   [key: string]: number[]
-// };
 
 const Note = ({ color = "bg-gray-700", content, letter }) => {
   return (
@@ -23,28 +18,101 @@ const Note = ({ color = "bg-gray-700", content, letter }) => {
   );
 };
 
+const BookingInfo = ({
+  type,
+  title,
+  startTime,
+  showingDate,
+  retailPrice,
+  currentSeats,
+  event,
+}) => {
+
+  return (
+    <>
+      {type === "primary" && (
+        <>
+          <div className="bg-[#fff] w-[350px] p-[18px] shadow-xl">
+            <p className="grid">
+              <span className="text-2xl font-semibold text-[#e71a0f]">
+                {title}
+              </span>
+              <span>
+                Session:
+                <strong>
+                  {" "}
+                  {startTime.slice(0, 5)}{" "}
+                  {DateTimeFormatter.formatDate(showingDate)}
+                </strong>
+              </span>
+              <span>
+                Retail Price:{" "}
+                <strong>
+                  {retailPrice.toLocaleString("en-US").replace(/,/g, ".")}
+                  <span className="ml-0.5">₫</span>
+                </strong>
+              </span>
+              <span>
+                Seat(s){" "}
+                <strong>
+                  {currentSeats
+                    .map((seat) => {
+                      return (
+                        String.fromCharCode(65 + Math.floor((seat - 1) / 10)) +
+                        (((seat - 1) % 10) + 1)
+                      );
+                    })
+                    .join(" ")}
+                </strong>
+              </span>
+            </p>
+          </div>
+
+          <div className="bg-[#fff] w-[350px] p-[18px] shadow-xl mt-10">
+            <p className="grid">
+              <span className="text-sm text-gray-500 font-semibold">
+                Total Price
+              </span>
+              <strong className="mt-3 text-xl">
+                {(retailPrice * currentSeats.length)
+                  .toLocaleString("en-US")
+                  .replace(/,/g, ".")}
+                <span className="ml-0.5">₫</span>
+              </strong>
+            </p>
+          </div>
+        </>
+      )}
+      {type !== "primary" && (
+        <>
+          <div className="fixed top-0 left-0 w-full h-full py-20 px-[32rem] bg-blur z-[1000]">
+            <div className="flex flex-col w-full h-full bg-white shadow-2xl">
+              <div className="flex-grow"></div>
+              <div className="flex justify-center items-center mb-10 h-12">
+                <form onSubmit={event}>
+                  <Button className="w-52">Confirm Booking</Button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+    </>
+  );
+};
+
 const Booking = () => {
-  const { movie, showTimeData } = useContext(Context);
+  const { auth, movie, showTimeData } = useSelector();
   const { showTimeId } = useParams();
 
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [currentSeats, setCurrentSeats] = useState([]);
-  // const { auth } = useContext(AuthContext);
-  // const navigate = useNavigate()
-
-  // useEffect(() => {
-  //   console.log(auth)
-  //   if (!auth) {
-  //     navigate('/login');
-  //   }
-  // }, [auth, navigate])
-
+  const [showForm, setShowForm] = useState(false);
+ 
   useEffect(() => {
     axios
       .get(`/showtime/seats/${showTimeId}`)
       .then((res) => setSelectedSeats(res.data));
-
-
   }, [showTimeId]);
 
   const handleSeatClick = (seat) => {
@@ -57,45 +125,36 @@ const Booking = () => {
     });
   };
 
-
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-
-
       const postData = {
-        accountId: "53FA83Ai4Qhk869ow02o",
+        accountId: auth?.accountId,
         showTimeId: showTimeId,
         seatNumbers: currentSeats,
-      }
+      };
 
-      console.log(postData)
-
-      await axios.post('/ticket', postData)
-
-
+      await axios.post("/ticket", postData);
+    } catch (error) {
+      console.log("Error submitting form", error.response.data.message);
     }
-    catch(error) {
-      console.log('Error submitting form', error.response.data.message);
-    }
-  }
+  };
 
   const RenderSeats = () => {
     const arraySeats = [];
 
     for (let seat = 1; seat <= 100; seat++) {
+      let seatNumber =
+        String.fromCharCode(65 + Math.floor((seat - 1) / 10)) +
+        (((seat - 1) % 10) + 1);
 
-      let seatNumber = String.fromCharCode(65 + Math.floor((seat - 1) / 10)) + ((seat - 1) % 10 + 1);
+      let seatColor;
+      if (selectedSeats.includes(seat)) {
+        seatColor = "bg-red-700 pointer-events-none";
+      } else if (currentSeats.includes(seat)) {
+        seatColor = "bg-green-700";
+      } else seatColor = "bg-blue-gray-300";
 
-      let seatColor
-      if(selectedSeats.includes(seat)) {
-        seatColor = "bg-red-700 pointer-events-none"
-      }
-      else if (currentSeats.includes(seat)) {
-        seatColor = "bg-green-700"
-      }
-      else seatColor = "bg-blue-gray-300"
-    
       arraySeats.push(
         <button
           className={`${seatColor} text-white h-8`}
@@ -108,7 +167,6 @@ const Booking = () => {
     }
     return <>{arraySeats}</>;
   };
-
 
   return (
     <div className="px-40 py-20">
@@ -142,54 +200,22 @@ const Booking = () => {
         </div>
 
         <div className="">
-          <div className="bg-[#fff] w-[350px] p-[18px] shadow-xl">
-            <p className="grid">
-              <span className="text-2xl font-semibold text-[#e71a0f]">
-                {movie.title}
-              </span>
-              <span>
-                Session:
-                <strong>
-                  {" "}
-                  {showTimeData.startTime.slice(0, 5)}{" "}
-                  {DateTimeFormatter.formatDate(showTimeData.showingDate)}
-                </strong>
-              </span>
-              <span>
-                Retail Price:{" "}
-                <strong>
-                  {movie.cost.toLocaleString("en-US").replace(/,/g, ".")}
-                  <span className="ml-0.5">₫</span>
-                </strong>
-              </span>
-              <span>
-                Seat(s){" "}
-                <strong>
-                  {currentSeats
-                    .map((seat) => {
-                      return String.fromCharCode(65 + Math.floor((seat - 1) / 10)) + (((seat - 1) % 10) + 1);
-                    })
-                    .join(" ")
-                  }
-                </strong>
-              </span>
-            </p>
-          </div>
-
-          <div className="bg-[#fff] w-[350px] p-[18px] shadow-xl mt-10">
-            <p className="grid">
-              <span className="text-sm text-gray-500 font-semibold">Total Price</span>
-              <strong className="mt-3 text-xl">{(movie.cost * currentSeats.length).toLocaleString("en-US").replace(/,/g, ".")}<span className="ml-0.5">₫</span></strong>
-              
-            </p>
-          </div>
-
+          <BookingInfo
+            type="primary"
+            title={movie.title}
+            startTime={showTimeData.startTime}
+            showingDate={showTimeData.showingDate}
+            retailPrice={movie.cost}
+            currentSeats={currentSeats}
+          />
           <div className="flex justify-end mt-10 h-12">
-            <form onSubmit={handleSubmit}>
-              <Button className="w-52">Buy Ticket</Button>
-            </form>
+            <Button className="w-52" onClick={() => setShowForm(true)}>
+              Buy Ticket
+            </Button>
           </div>
         </div>
+
+        {showForm && <BookingInfo event={handleSubmit} />}
       </div>
     </div>
   );

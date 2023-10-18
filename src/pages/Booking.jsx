@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "~/api/axios";
 import { useSelector } from "~/hooks";
 import { DateTimeFormatter } from "~/components";
@@ -27,6 +27,8 @@ const BookingInfo = ({
   currentSeats,
   event,
 }) => {
+  
+  const { userContext } = useSelector();
 
   return (
     <>
@@ -85,10 +87,57 @@ const BookingInfo = ({
       )}
       {type !== "primary" && (
         <>
-          <div className="fixed top-0 left-0 w-full h-full py-20 px-[32rem] bg-blur z-[1000]">
+          <div className="fixed top-0 left-0 w-full h-full py-48 px-[32rem] bg-blur z-[1000]">
             <div className="flex flex-col w-full h-full bg-white shadow-2xl">
-              <div className="flex-grow"></div>
-              <div className="flex justify-center items-center mb-10 h-12">
+              <div className="flex-grow px-12">
+                <h1 className="text-3xl py-4 text-center text-red-700">
+                  {title}
+                </h1>
+                <p className="grid grid-cols-2 mb-2">
+                  <span>
+                    <strong>Name: </strong>
+                    {userContext.username}
+                  </span>
+                  <span className="flex justify-end">
+                    <strong className="mr-2">Email:</strong>
+                    {userContext.email}
+                  </span>
+                </p>
+                <div className="border-t-2 border-gray-700">&nbsp;</div>
+                <p className="grid grid-cols-2 gap-4 text-lg px-3">
+                  <span>
+                    <strong>Date:</strong>{" "}
+                    {DateTimeFormatter.formatDate(showingDate)}
+                  </span>
+                  <span>
+                    <strong>Time:</strong> {startTime.slice(0, 5)}
+                  </span>
+                  <span>
+                    <strong>Seat(s) </strong>
+                    {currentSeats
+                      .map((seat) => {
+                        return (
+                          String.fromCharCode(
+                            65 + Math.floor((seat - 1) / 10)
+                          ) +
+                          (((seat - 1) % 10) + 1)
+                        );
+                      })
+                      .join(" ")}
+                  </span>
+                </p>
+                <div className="border-b-2 border-gray-700">&nbsp;</div>
+                <p className="flex justify-end">
+                  <strong className="mt-5 mr-10 text-2xl">
+                    Total:&nbsp;
+                    {(retailPrice * currentSeats.length)
+                      .toLocaleString("en-US")
+                      .replace(/,/g, ".")}
+                    <span className="ml-0.5">₫</span>
+                  </strong>
+                </p>
+              </div>
+              <div className="flex justify-center items-center mb-4 h-12">
                 <form onSubmit={event}>
                   <Button className="w-52">Confirm Booking</Button>
                 </form>
@@ -104,15 +153,27 @@ const BookingInfo = ({
 const Booking = () => {
   const { auth, movie, showTimeData } = useSelector();
   const { showTimeId } = useParams();
-
+  const navigate = useNavigate();
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [currentSeats, setCurrentSeats] = useState([]);
   const [showForm, setShowForm] = useState(false);
- 
+
   useEffect(() => {
     axios
       .get(`/showtime/seats/${showTimeId}`)
       .then((res) => setSelectedSeats(res.data));
+
+    const handleEsc = (event) => {
+      if (event.keyCode === 27) {
+        setShowForm(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleEsc);
+
+    return () => {
+      window.removeEventListener("keydown", handleEsc);
+    };
   }, [showTimeId]);
 
   const handleSeatClick = (seat) => {
@@ -135,6 +196,7 @@ const Booking = () => {
       };
 
       await axios.post("/ticket", postData);
+      navigate("/");
     } catch (error) {
       console.log("Error submitting form", error.response.data.message);
     }
@@ -215,7 +277,16 @@ const Booking = () => {
           </div>
         </div>
 
-        {showForm && <BookingInfo event={handleSubmit} />}
+        {showForm && (
+          <BookingInfo
+            event={handleSubmit}
+            title={movie.title}
+            startTime={showTimeData.startTime}
+            showingDate={showTimeData.showingDate}
+            retailPrice={movie.cost}
+            currentSeats={currentSeats}
+          />
+        )}
       </div>
     </div>
   );

@@ -30,7 +30,7 @@ const Header = () => {
   const location = useLocation();
   const [toggle, setToggle] = useState(false);
   
-  const { auth } = useSelector()
+  const { auth, setUserContext } = useSelector()
   const [user, setUser] = useState({})
 
   useEffect(() => {
@@ -45,9 +45,13 @@ const Header = () => {
             signal: controller.signal,
           })
 
-          console.log(response.data)
+          if(isMounted) {
+            setUser(response.data)
+            setUserContext(response.data)
+          }
+
           
-          isMounted && setUser(response.data)
+
         }
       }
       catch(error) {
@@ -62,7 +66,7 @@ const Header = () => {
       controller.abort()
     }
 
-  }, [auth])
+  }, [auth, setUserContext])
 
 
   const renderItems = (isRes) => {

@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faNewspaper, faUser } from "@fortawesome/free-regular-svg-icons";
 import { faMoneyCheckDollar, faTicket } from "@fortawesome/free-solid-svg-icons";
 import { useLocation, Link } from "react-router-dom";
 
-import axios from "~/api/axios";
+import { useAxiosPrivate } from "~/hooks";
 import { useSelector } from "~/hooks";
 
-import { Button, CarouselRenderer } from "~/components";
+import { Button, CarouselRenderer, RechargeBalance } from "~/components";
 import images from "~/assets/images";
 
 const NAV_ITEM = [
@@ -28,10 +28,13 @@ const NAV_ITEM = [
 const Header = () => {
 
   const location = useLocation();
+  const axiosPrivate = useAxiosPrivate();
   const [toggle, setToggle] = useState(false);
-  
+  const [rechargeForm, setRechargeForm] = useState(false)
   const { auth, setUserContext } = useSelector()
   const [user, setUser] = useState({})
+
+  const effectRun = useRef(false);
 
   useEffect(() => {
     
@@ -41,17 +44,13 @@ const Header = () => {
     const getUser = async () => {
       try {
         if(auth) {
-          const response = await axios.get(`/user/${auth.accountId}`, {
+          const response = await axiosPrivate.get(`/user/${auth.accountId}`, {
             signal: controller.signal,
           })
-
           if(isMounted) {
             setUser(response.data)
             setUserContext(response.data)
           }
-
-          
-
         }
       }
       catch(error) {
@@ -59,14 +58,17 @@ const Header = () => {
       }
     }
 
-    getUser()
+    if (effectRun.current) {
+      getUser()
+    }
 
     return () => {
       isMounted = false
       controller.abort()
+      effectRun.current = true
     }
 
-  }, [auth, setUserContext])
+  }, [auth, setUserContext, axiosPrivate])
 
 
   const renderItems = (isRes) => {
@@ -103,6 +105,7 @@ const Header = () => {
 
   return (
     <>
+      {rechargeForm && <RechargeBalance accountId={auth.accountId}/>}
       <div className="w-full md:px-40">
         <div className="flex justify-between text-[#ce1910]">
           <div className='flex '>
@@ -127,10 +130,10 @@ const Header = () => {
           (
             <div className="flex space-x-2">
                <Button
-                className="pointer-events-none"
                 animation="zoom"
                 type="text"
                 icon={<FontAwesomeIcon icon={faMoneyCheckDollar} />}
+                onClick={() => setRechargeForm(true)}
               >
                 {user.balance.toLocaleString("en-US").replace(/,/g, ".")}
                 <span className="ml-0.5">₫</span>

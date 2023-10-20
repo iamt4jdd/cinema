@@ -13,7 +13,7 @@ import { Button } from "~/components";
 
 
 
-  const TextField = ({ title, inputRef, event, value = '', type }) => {
+  const TextField = ({ title, placeholder, inputRef, event, value = '', type }) => {
     
     return (
       <>
@@ -24,7 +24,7 @@ import { Button } from "~/components";
             ref={inputRef}
             name={title.toLowerCase()}
             type={type}
-            placeholder={title}
+            placeholder={placeholder}
             value={value}
             onChange={event}
             required
@@ -116,6 +116,7 @@ import { Button } from "~/components";
       
           const loggedInResponse = await axios.post(USER_URL + '/login', JSON.stringify(loginData), {
             headers: { "Content-Type": "application/json" },
+            withCredentials: true
           });
           
           setMessage(loggedInResponse?.data?.message);
@@ -123,7 +124,7 @@ import { Button } from "~/components";
           handleNotificationState(loggedInResponse, setLoginData, initialLogin);
 
           if(loggedInResponse?.data?.accountId != undefined) {
-            const accessToken = loggedInResponse?.data?.token;
+            const accessToken = loggedInResponse?.data?.accessToken;
             const accountId = loggedInResponse?.data?.accountId;
             const email = loginData?.email
             // console.log(email)
@@ -174,8 +175,8 @@ import { Button } from "~/components";
               {isLogin && (
                 <>
                   <div className="w-full bg-[#f0f4f9]/75 shadow-lg px-8 pt-6 pb-8 mb-4">
-                    <TextField title="Email" event={handleInputChange} value={loginData.email}  inputRef={emailRef}/>
-                    <TextField title="Password" type="password" value={loginData.password} event={handleInputChange} inputRef={passwordRef} />
+                    <TextField title="Email" event={handleInputChange} value={loginData.email} placeholder='you@gmail.com' inputRef={emailRef}/>
+                    <TextField title="Password" type="password" value={loginData.password} placeholder='••••••••••••••' event={handleInputChange} inputRef={passwordRef} />
                     <div className="flex items-center justify-between mt-8 h-[40px]">
                       <Button
                         className="font-bold py-2 px-4 rounded w-[150px] h-full"
@@ -209,10 +210,10 @@ import { Button } from "~/components";
               {isRegister && (
                 <>
                   <div className="w-full bg-[#f0f4f9]/75 shadow-lg px-8 pt-6 pb-8 mb-4">
-                    <TextField title="Username" event={handleInputChange} value={registerData.username} inputRef={usernameRef}/>
-                    <TextField title="Password" type="password" event={handleInputChange} value={registerData.password}  inputRef={passwordRef}/>
-                    <TextField title="Email" type="email"  event={handleInputChange} value={registerData.email} inputRef={emailRef}/>
-                    <TextField title="Nickname"  event={handleInputChange} value={registerData.nickname}  inputRef={nicknameRef}/>
+                    <TextField title="Username" event={handleInputChange} value={registerData.username} placeholder='rjckrolz' inputRef={usernameRef}/>
+                    <TextField title="Nickname"  event={handleInputChange} value={registerData.nickname} placeholder='Rick Roll' inputRef={nicknameRef}/>
+                    <TextField title="Email" type="email"  event={handleInputChange} value={registerData.email} placeholder='you@gmail.com' inputRef={emailRef}/>
+                    <TextField title="Password" type="password" event={handleInputChange} value={registerData.password} placeholder='••••••••••••••' inputRef={passwordRef}/>
                     <div className="flex items-center justify-between mt-8 h-[40px]">
                       <Button
                         className="font-bold py-2 px-4 rounded w-[150px] h-full"

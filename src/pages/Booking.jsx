@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "~/api/axios";
 import { useSelector } from "~/hooks";
 import { DateTimeFormatter } from "~/components";
 import { Button } from "~/components";
+import { useAxiosPrivate } from "~/hooks";
 
 const Note = ({ color = "bg-gray-700", content, letter }) => {
   return (
@@ -27,7 +27,6 @@ const BookingInfo = ({
   currentSeats,
   event,
 }) => {
-  
   const { userContext } = useSelector();
 
   return (
@@ -157,9 +156,11 @@ const Booking = () => {
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [currentSeats, setCurrentSeats] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const [message, setMessage] = useState(false);
+  const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
-    axios
+    axiosPrivate
       .get(`/showtime/seats/${showTimeId}`)
       .then((res) => setSelectedSeats(res.data));
 
@@ -169,12 +170,14 @@ const Booking = () => {
       }
     };
 
+    if(currentSeats.length > 0) setMessage(false)
+
     window.addEventListener("keydown", handleEsc);
 
     return () => {
       window.removeEventListener("keydown", handleEsc);
     };
-  }, [showTimeId]);
+  }, [showTimeId, currentSeats, axiosPrivate]);
 
   const handleSeatClick = (seat) => {
     setCurrentSeats((prev) => {
@@ -195,7 +198,7 @@ const Booking = () => {
         seatNumbers: currentSeats,
       };
 
-      await axios.post("/ticket", postData);
+      await axiosPrivate.post("/ticket", postData);
       navigate("/");
     } catch (error) {
       console.log("Error submitting form", error.response.data.message);
@@ -271,10 +274,20 @@ const Booking = () => {
             currentSeats={currentSeats}
           />
           <div className="flex justify-end mt-10 h-12">
-            <Button className="w-52" onClick={() => setShowForm(true)}>
+            <Button
+              className="w-52"
+              onClick={() => {
+                currentSeats.length > 0 ? setShowForm(true) : setMessage(true);
+              }}
+            >
               Buy Ticket
             </Button>
           </div>
+          {message && (
+            <div className="flex justify-end mt-5 text-red-700">
+              You must select a seat to buy ticket!
+            </div>
+          )}
         </div>
 
         {showForm && (

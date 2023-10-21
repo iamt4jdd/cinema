@@ -61,11 +61,21 @@ const Header = () => {
     if (effectRun.current) {
       getUser()
     }
-
+    
+    
+    const handleEsc = (event) => {
+      if (event.keyCode === 27) {
+        setRechargeForm(false);
+      }
+    };
+    
+    window.addEventListener("keydown", handleEsc);
+    
     return () => {
-      isMounted = false
+      isMounted = false 
       controller.abort()
       effectRun.current = true
+      window.removeEventListener("keydown", handleEsc);
     }
 
   }, [auth, setUserContext, axiosPrivate])

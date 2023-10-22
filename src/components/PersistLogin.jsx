@@ -9,6 +9,7 @@ const PersistLogin = () => {
 
     
     useEffect(() => {
+        
         let isMounted = true;
 
         const verifyRefreshToken = async () => {
@@ -22,8 +23,7 @@ const PersistLogin = () => {
                 isMounted && setIsLoading(false);
             }
         }
-        // persist added here AFTER tutorial video
-        // Avoids unwanted call to verifyRefreshToken
+
         !auth?.accessToken && persist ? verifyRefreshToken() : setIsLoading(false);
 
         return () => isMounted = false;

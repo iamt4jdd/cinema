@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useSelector } from "~/hooks";
+import { useSelector, useAuth } from "~/hooks";
 import { DateTimeFormatter } from "~/components";
 import { Button } from "~/components";
 import { useAxiosPrivate } from "~/hooks";
@@ -150,7 +150,8 @@ const BookingInfo = ({
 };
 
 const Booking = () => {
-  const { auth, movie, showTimeData } = useSelector();
+  const { auth } = useAuth()
+  const { movie, showTimeData } = useSelector();
   const { showTimeId } = useParams();
   const navigate = useNavigate();
   const [selectedSeats, setSelectedSeats] = useState([]);

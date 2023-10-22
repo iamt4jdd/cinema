@@ -1,19 +1,15 @@
 import { createContext, useState, useEffect } from "react";
 
-const Context = createContext({});
+const DataContext = createContext({});
 
-export const Provider = ({ children }) => {
-  const [auth, setAuth] = useState();
-  const [persist, setPersist] = useState(
-    JSON.parse(localStorage.getItem("persist")) || false
-  );
+export const DataProvider = ({ children }) => {
+  
   const [movie, setMovie] = useState(
     JSON.parse(localStorage.getItem("movie")) || null
   );
   const [showTimeData, setShowTimeData] = useState(
     JSON.parse(localStorage.getItem("showTimeData")) || null
   );
-
   const [userContext, setUserContext] = useState(
     JSON.parse(localStorage.getItem("userContext")) || null
   );
@@ -22,15 +18,11 @@ export const Provider = ({ children }) => {
     localStorage.setItem("movie", JSON.stringify(movie));
     localStorage.setItem("showTimeData", JSON.stringify(showTimeData));
     localStorage.setItem("userContext", JSON.stringify(userContext));
-  }, [movie, showTimeData, userContext]);
+  }, [movie, showTimeData, userContext,]);
 
   return (
-    <Context.Provider
+    <DataContext.Provider
       value={{
-        auth,
-        setAuth,
-        persist,
-        setPersist,
         movie,
         setMovie,
         showTimeData,
@@ -40,8 +32,8 @@ export const Provider = ({ children }) => {
       }}
     >
       {children}
-    </Context.Provider>
+    </DataContext.Provider>
   );
 };
 
-export default Context;
+export default DataContext;

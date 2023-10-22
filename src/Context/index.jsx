@@ -1,4 +1,9 @@
-import Context, { Provider } from './Context'
+import AuthContext, { AuthProvider } from "./AuthProvider";
+import DataContext, { DataProvider } from "./DataProvider";
 
-
-export { Context, Provider }
+export {
+  AuthContext,
+  AuthProvider,
+  DataContext,
+  DataProvider,
+};

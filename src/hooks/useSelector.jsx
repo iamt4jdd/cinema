@@ -1,10 +1,8 @@
-import { useContext, useDebugValue } from "react"
-import { Context } from "~/Context"
+import { useContext } from "react"
+import { DataContext } from "~/Context";
 
 const useSelector = () => {
-  const { auth } = useContext(Context);
-  useDebugValue(auth, auth => auth?.email ? "Logged In" : "Logged Out")
-  return useContext(Context)
+  return useContext(DataContext)
 }
 
 export default useSelector

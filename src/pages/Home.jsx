@@ -1,9 +1,13 @@
+import { useAuth } from "~/hooks"
 
 
 const Home = () => {
   
+  const { isLoggedIn } = useAuth()
   return (
-    <div></div>
+    <div>
+      {console.log(isLoggedIn)}
+    </div>
   )
 }
 

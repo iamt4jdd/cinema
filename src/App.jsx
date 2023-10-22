@@ -9,6 +9,7 @@ import { publicRoutes, privateRoutes } from "./routes";
 import { DefaultLayout } from "./layouts";
 import { RequireAuth, PersistLogin } from "./components";
 
+
 const debounce = (func, delay) => {
   let timer;
   return (...args) => {
@@ -47,8 +48,6 @@ function App() {
             {publicRoutes.map((route, index) => {
               let Page = route.component;
 
-              let Provider = route.provider ?? "div";
-
               let Layout = DefaultLayout;
 
               if (route.layout) {
@@ -62,20 +61,16 @@ function App() {
                   path={route.path}
                   element={
                     <Layout>
-                      <Provider>
-                        <Page />
-                      </Provider>
+                      <Page />
                     </Layout>
                   }
                 />
               );
             })}
-            {/* <Route element={<PersistLogin />}> */}
+            <Route element={<PersistLogin />}>
               <Route element={<RequireAuth />}>
                 {privateRoutes.map((route, index) => {
                   let Page = route.component;
-
-                  let Provider = route.provider ?? "div";
 
                   let Layout = DefaultLayout;
 
@@ -90,16 +85,14 @@ function App() {
                       path={route.path}
                       element={
                         <Layout>
-                          <Provider>
-                            <Page />
-                          </Provider>
+                          <Page />
                         </Layout>
                       }
                     />
                   );
                 })}
               </Route>
-            {/* </Route> */}
+            </Route>
           </Routes>
         </div>
       </Router>

@@ -5,7 +5,7 @@ import { faMoneyCheckDollar, faTicket } from "@fortawesome/free-solid-svg-icons"
 import { useLocation, Link } from "react-router-dom";
 
 import { useAxiosPrivate } from "~/hooks";
-import { useSelector } from "~/hooks";
+import { useSelector, useAuth } from "~/hooks";
 
 import { Button, CarouselRenderer, RechargeBalance } from "~/components";
 import images from "~/assets/images";
@@ -31,7 +31,8 @@ const Header = () => {
   const axiosPrivate = useAxiosPrivate();
   const [toggle, setToggle] = useState(false);
   const [rechargeForm, setRechargeForm] = useState(false)
-  const { auth, setUserContext } = useSelector()
+  const { setUserContext } = useSelector()
+  const { auth } = useAuth()
   const [user, setUser] = useState({})
 
   const effectRun = useRef(false);

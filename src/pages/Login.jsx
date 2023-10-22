@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useSelector } from "~/hooks";
+import { useAuth } from "~/hooks";
 import axios from "~/api/axios";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -52,7 +52,7 @@ const Login = () => {
 
   const USER_URL = "/user";
 
-  const { setAuth, persist, setPersist } = useSelector();
+  const { setAuth, setIsLoggedIn ,persist, setPersist } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location?.state?.from?.pathname || "/";
@@ -125,10 +125,9 @@ const Login = () => {
           const accessToken = loggedInResponse?.data?.accessToken;
           const accountId = loggedInResponse?.data?.accountId;
           const email = loginData?.email;
-          // console.log(email)
-          // console.log(password)
-          // console.log(accessToken)
+
           setAuth({ email, accountId, accessToken });
+          setIsLoggedIn(true)
           navigate(from, { replace: true });
         }
       } else if (isRegister) {
@@ -165,10 +164,6 @@ const Login = () => {
       return () => clearTimeout(timeout);
     }
   }, [message]);
-
-  useEffect(() => {
-    localStorage.setItem("persist", persist);
-  }, [persist]);
 
   return (
     <>

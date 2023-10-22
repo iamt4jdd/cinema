@@ -18,6 +18,7 @@ const RechargeBalance = ({ accountId }) => {
 
     try {
       await axiosPrivate.patch(`user/${accountId}/balance`, JSON.stringify(amount));
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }

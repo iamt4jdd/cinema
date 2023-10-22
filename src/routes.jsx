@@ -15,7 +15,7 @@ const publicRoutes = [
     { path: '/now-showing', component: NowShowing },
     { path: '/coming-soon', component: ComingSoon },
     { path: '/movie/:movieId', component: Movie },
-
+    
 ]
 
 const privateRoutes = [

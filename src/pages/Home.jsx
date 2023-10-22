@@ -1,11 +1,12 @@
-import useRefreshToken from "~/hooks/useRefreshToken"
+import { useAuth } from "~/hooks"
 
 
 const Home = () => {
-  const refresh = useRefreshToken()
+  
+  const { isLoggedIn } = useAuth()
   return (
-    <div className='py-4'>
-      <button onClick={() => {refresh()}}>Refresh</button>
+    <div>
+      {console.log(isLoggedIn)}
     </div>
   )
 }

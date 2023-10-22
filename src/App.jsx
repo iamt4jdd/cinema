@@ -7,7 +7,8 @@ import {
 } from "react-router-dom";
 import { publicRoutes, privateRoutes } from "./routes";
 import { DefaultLayout } from "./layouts";
-import { RequireAuth } from "./components";
+import { RequireAuth, PersistLogin } from "./components";
+
 
 const debounce = (func, delay) => {
   let timer;
@@ -47,8 +48,6 @@ function App() {
             {publicRoutes.map((route, index) => {
               let Page = route.component;
 
-              let Provider = route.provider ?? "div";
-
               let Layout = DefaultLayout;
 
               if (route.layout) {
@@ -62,41 +61,37 @@ function App() {
                   path={route.path}
                   element={
                     <Layout>
-                      <Provider>
-                        <Page />
-                      </Provider>
+                      <Page />
                     </Layout>
                   }
                 />
               );
             })}
-            <Route element={<RequireAuth />}>
-              {privateRoutes.map((route, index) => {
-                let Page = route.component;
+            <Route element={<PersistLogin />}>
+              <Route element={<RequireAuth />}>
+                {privateRoutes.map((route, index) => {
+                  let Page = route.component;
 
-                let Provider = route.provider ?? "div";
+                  let Layout = DefaultLayout;
 
-                let Layout = DefaultLayout;
-
-                if (route.layout) {
-                  Layout = route.layout;
-                } else if (route.layout === null) {
-                  Layout = Fragment;
-                }
-                return (
-                  <Route
-                    key={index}
-                    path={route.path}
-                    element={
-                      <Layout>
-                        <Provider>
+                  if (route.layout) {
+                    Layout = route.layout;
+                  } else if (route.layout === null) {
+                    Layout = Fragment;
+                  }
+                  return (
+                    <Route
+                      key={index}
+                      path={route.path}
+                      element={
+                        <Layout>
                           <Page />
-                        </Provider>
-                      </Layout>
-                    }
-                  />
-                );
-              })}
+                        </Layout>
+                      }
+                    />
+                  );
+                })}
+              </Route>
             </Route>
           </Routes>
         </div>

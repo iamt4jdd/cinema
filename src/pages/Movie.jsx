@@ -18,7 +18,7 @@ const DateButton = ({ date, weekday, month, onClick }) => {
       onClick={onClick}
     >
       <div className="grid grid-cols-2">
-        <div className="grid grid-rows-2"> 
+        <div className="grid grid-rows-2">
           <span className="flex flex-start">{month}</span>
           <em className="flex flex-start">{weekday}</em>
         </div>
@@ -28,12 +28,68 @@ const DateButton = ({ date, weekday, month, onClick }) => {
   );
 };
 
+const Recommended = () => {
+  const [sliderRef, setSliderRef] = useState(null);
+  const [recommendedMovie, setRecommendedMovie] = useState([]);
 
+  useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+    const getRecommendedMovies = async () => {
+      try {
+        const response = await axios.get("/showtime/coming", {
+          signal: controller.signal,
+        });
+        // isMounted && console.log(response.data);
+        isMounted && setRecommendedMovie(response.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
 
+    getRecommendedMovies();
 
-const BookingForm = ({showForm, setShowForm, showTimes, movies, handleDateButtonClick}) => {
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
+  }, []);
 
-  const { setShowTimeData } = useSelector()
+  return (
+    <>
+      <div className="pt-20">
+        <div className="md:px-40">
+          <h1 className="font-bold uppercase text-xl">You might also like</h1>
+          <div className="border-b-2 border-gray-700">&nbsp;</div>
+        </div>
+        <div className="px-[147px] mt-10">
+          <SliderRenderer
+            setSliderRef={setSliderRef}
+            listSlider={recommendedMovie}
+          />
+          {console.log(recommendedMovie)}
+        </div>
+        <div className="flex flex-1 justify-between md:px-40 mt-6">
+          <Button onClick={sliderRef?.slickPrev} className="w-[150px] h-11">
+            Previous
+          </Button>
+          <Button onClick={sliderRef?.slickNext} className="w-[150px] h-11">
+            Next
+          </Button>
+        </div>
+      </div>
+    </>
+  );
+};
+
+const BookingForm = ({
+  showForm,
+  setShowForm,
+  showTimes,
+  movies,
+  handleDateButtonClick,
+}) => {
+  const { setShowTimeData } = useSelector();
 
   return (
     showForm && (
@@ -76,16 +132,26 @@ const BookingForm = ({showForm, setShowForm, showTimes, movies, handleDateButton
             {showTimes &&
               showTimes
                 .sort((a, b) => {
-                  const timeA = DateTimeFormatter.timeStringToMinutes(a.startTime);
-                  const timeB = DateTimeFormatter.timeStringToMinutes(b.startTime);
+                  const timeA = DateTimeFormatter.timeStringToMinutes(
+                    a.startTime
+                  );
+                  const timeB = DateTimeFormatter.timeStringToMinutes(
+                    b.startTime
+                  );
                   return timeA - timeB;
                 })
-                .map(({showTimeId, showingDate, startTime}) => (
+                .map(({ showTimeId, showingDate, startTime }) => (
                   <Button
                     key={showTimeId}
                     type="text border-gray-300 border-2 text-lg w-24 justify-center"
                     to={`/booking/${showTimeId}`}
-                    onClick = {() => setShowTimeData({showTimeId: showTimeId, showingDate: showingDate, startTime: startTime})}
+                    onClick={() =>
+                      setShowTimeData({
+                        showTimeId: showTimeId,
+                        showingDate: showingDate,
+                        startTime: startTime,
+                      })
+                    }
                   >
                     {startTime.slice(0, 5)}
                   </Button>
@@ -94,21 +160,19 @@ const BookingForm = ({showForm, setShowForm, showTimes, movies, handleDateButton
         </div>
       </div>
     )
-  )
-}
+  );
+};
 
 const Movie = () => {
-  const { movie } = useSelector()
+  const { movie } = useSelector();
 
   const [movies, setMovies] = useState(null);
   const [showTimes, setShowTimes] = useState();
   const { movieId } = useParams();
 
   const [showForm, setShowForm] = useState(false);
-  const [sliderRef, setSliderRef] = useState(null);
 
   useEffect(() => {
-
     axios.get(`/showtime/${movieId}`).then((res) => setMovies(res.data));
 
     const handleEsc = (event) => {
@@ -116,14 +180,13 @@ const Movie = () => {
         setShowForm(false);
       }
     };
-  
+
     window.addEventListener("keydown", handleEsc);
 
     return () => {
       window.removeEventListener("keydown", handleEsc);
     };
   }, [movieId, movie]);
-
 
   const handleDateButtonClick = (date) => {
     const moviesWithDate = movies.filter((movie) =>
@@ -149,25 +212,29 @@ const Movie = () => {
           <div
             className="bg-dimBlack py-8"
             style={{
-              backgroundImage: `linear-gradient(90deg, rgb(26, 26, 26) 24.97%, rgb(26, 26, 26) 40.3%,
-          rgba(26, 26, 26, 0.04) 97.47%, rgb(26, 26, 26) 100%), url(${images.tenet})`,
-              backgroundSize: "cover",
+              backgroundImage: `linear-gradient(120deg, rgb(26, 26, 26) 40.97%, rgb(26, 26, 26) 40.3%,
+          rgba(26, 26, 26, 0.04) 97.47%, rgb(26, 26, 26) 100%), url(${images.avatar2})`,
+              backgroundSize:"cover",
               backgroundRepeat: "no-repeat",
               backgroundPosition: "center center",
             }}
           >
             <div className="flex px-40">
-              <div className="flex flex-col w-[270px] h-[412px] rounded-lg bg-black">
+              <div className="flex flex-col w-[270px] h-[432px] rounded-lg bg-black">
                 <img
                   src={movie.image}
-                  alt="tenet"
-                  className="h-full w-[full]  rounded-t-lg border-[1px] border-slate-700"
+                  alt={movie.title}
+                  className="h-[400px] w-full rounded-t-lg border-[1px] border-slate-700"
                 ></img>
-                <div className="text-center text-white py-1">In cinemas</div>
+                <div className="text-center border-slate-700 border-[1px] rounded-b-lg text-white py-1">
+                  In cinemas
+                </div>
               </div>
               <div className="ml-14 mt-10">
                 <div className="text-white">
-                  <h1 className="font-bold text-4xl">{movie.title}</h1>
+                  <h1 className="font-bold text-4xl uppercase">
+                    {movie.title}
+                  </h1>
                   <div className="my-4 font-bold text-lg">
                     <FontAwesomeIcon
                       icon={faThumbsUp}
@@ -177,7 +244,8 @@ const Movie = () => {
                     <span className="ml-2">are interested</span>
                   </div>
                   <div className="my-4 font-bold text-lg">
-                    {DateTimeFormatter.minutesToHours(movie.runTime)}<span className="mx-3">•</span>
+                    {DateTimeFormatter.minutesToHours(movie.runTime)}
+                    <span className="mx-3">•</span>
                     {movie.genre}
                   </div>
                   <div className="my-4 font-bold text-lg">
@@ -197,47 +265,8 @@ const Movie = () => {
           </div>
         )}
 
-        <div className="pt-20">
-          <div className="md:px-40">
-            <h1 className="font-bold uppercase text-xl">You might also like</h1>
-            <div className="border-b-2 border-gray-700">&nbsp;</div>
-          </div>
-          <div className="px-[147px] mt-10">
-            <SliderRenderer
-              setSliderRef={setSliderRef}
-              listSlider={[
-                {
-                  image: images.tenet,
-                },
-                {
-                  image: images.tenet,
-                },
-                {
-                  image: images.tenet,
-                },
-                {
-                  image: images.tenet,
-                },
-                {
-                  image: images.tenet,
-                },
-                {
-                  image: images.tenet,
-                },
-              ]}
-            />
-          </div>
-          <div className="flex flex-1 justify-between md:px-40 mt-6">
-            <Button onClick={sliderRef?.slickPrev} className="w-[150px] h-11">
-              Previous
-            </Button>
-            <Button onClick={sliderRef?.slickNext} className="w-[150px] h-11">
-              Next
-            </Button>
-          </div>
-        </div>
+        <Recommended />
       </div>
-
 
       <BookingForm
         showForm={showForm}
@@ -246,7 +275,6 @@ const Movie = () => {
         movies={movies}
         handleDateButtonClick={handleDateButtonClick}
       />
-
     </>
   );
 };

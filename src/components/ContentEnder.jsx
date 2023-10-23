@@ -13,21 +13,21 @@ const ContentEnder = () => {
                         Let&#39;s Talk
                   </h2>
                   <h1 className="leading-6 font-bold tracking-wide mt-8">
-                      NEED TO REACH US?
+                      WANT TO BOOK MOVIE TICKETS?
                   </h1>
                   <div className="my-10 sm:mt-10 flex">
                       <Button
-                      to="/contact"
+                      to="/login"
                       className="w-36 h-12"
                       animation="zoom"
                       >
-                      Contact Us
+                      BOOK TICKETS
                       </Button>
                   </div>
               </div>
           </div>
           <div className="flex flex-col justify-center md:w-[1500px] md:h-[600px]">
-              <img src={images.tenet} alt="Building" className="h-full w-full" />
+              <img src={images.batman} alt="Building" className="h-full w-full" />
           </div>
         </div>
       </div>

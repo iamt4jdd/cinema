@@ -3,7 +3,7 @@
 import Slider from "react-slick";
 
 import { MovieRenderer } from ".";
-
+import { DateTimeFormatter } from ".";
 
 const SliderRenderer = ({
   listSlider,
@@ -54,8 +54,8 @@ const SliderRenderer = ({
         className="flex flex-1 md:px-[138px] xl:px-0"
       >
         {listSlider.map((slider, index) => (
-            <MovieRenderer key={index} image={slider.image} title={slider.title} 
-            genre={slider.genre} airtime={slider.airtime} type={type}
+            <MovieRenderer key={index} image={`http://localhost:5555/public/assets/${slider.thumbnail}`} title={slider.title} 
+            genre={slider.genre} runTime={DateTimeFormatter.timeStringToMinutes(slider.runTime)} type={type}
             className='px-3'
             />
         ))}

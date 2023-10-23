@@ -19,7 +19,7 @@ const ComingSoon = () => {
       </div>
       <div className="border-b-2 border-gray-700">&nbsp;</div>
       {comingSoon.message ? (
-        <div className="text-center font-bold text-3xl my-12 text-red-500 uppercase">
+        <div className="text-center font-bold text-3xl my-12 text-red-600 uppercase">
           {comingSoon.message}
         </div>
       ) : (

@@ -315,7 +315,7 @@ const Login = () => {
         >
           <img
             className="mx-auto w-full md:w-4/5 transform -rotate-6 transition hover:scale-105 duration-700 ease-in-out hover:rotate-6"
-            src={images.macbook}
+            src={images.mac}
           />
         </div>
       </div>

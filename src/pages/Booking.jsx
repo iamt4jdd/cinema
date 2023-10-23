@@ -35,7 +35,7 @@ const BookingInfo = ({
         <>
           <div className="bg-[#fff] w-[350px] p-[18px] shadow-xl">
             <p className="grid">
-              <span className="text-2xl font-semibold text-[#e71a0f]">
+              <span className="text-2xl font-semibold uppercase text-[#e71a0f]">
                 {title}
               </span>
               <span>

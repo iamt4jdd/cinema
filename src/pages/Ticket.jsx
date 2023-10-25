@@ -1,7 +1,9 @@
 
 const Ticket = () => {
   return (
-    <div>Ticket</div>
+    <div className="mx-40">
+      Ticket
+    </div>
   )
 }
 

@@ -4,3 +4,4 @@ export { default as NowShowing } from './NowShowing';
 export { default as ComingSoon } from './ComingSoon';
 export { default as Booking } from './Booking';
 export { default as Movie } from './Movie';
+export { default as Ticket } from './Ticket';

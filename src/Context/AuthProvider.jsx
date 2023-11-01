@@ -6,7 +6,7 @@ export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState();
   
   const [isLoggedIn, setIsLoggedIn] = useState(
-    JSON.parse(localStorage.getItem("isLoggedIn")) || false
+    JSON.parse(localStorage.getItem("isLoggedIn")) || (auth?.accountId ? true : false)
   );
  
   const [persist, setPersist] = useState(

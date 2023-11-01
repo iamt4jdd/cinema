@@ -25,6 +25,7 @@ const BookingInfo = ({
   showingDate,
   retailPrice,
   currentSeats,
+  message,
   event,
 }) => {
   const { userContext } = useSelector();
@@ -88,6 +89,7 @@ const BookingInfo = ({
         <>
           <div className="fixed top-0 left-0 w-full h-full py-48 px-[32rem] bg-blur z-[1000]">
             <div className="flex flex-col w-full h-full bg-white shadow-2xl">
+              <div className="absolute">X</div>
               <div className="flex-grow px-12">
                 <h1 className="text-3xl py-4 text-center text-red-700">
                   {title}
@@ -136,6 +138,7 @@ const BookingInfo = ({
                   </strong>
                 </p>
               </div>
+              {message && <div className="text-center text-red-600">{message}</div>}
               <div className="flex justify-center items-center mb-4 h-12">
                 <form onSubmit={event}>
                   <Button className="w-52">Confirm Booking</Button>
@@ -157,7 +160,8 @@ const Booking = () => {
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [currentSeats, setCurrentSeats] = useState([]);
   const [showForm, setShowForm] = useState(false);
-  const [message, setMessage] = useState(false);
+  const [message, setMessage] = useState("");
+  const [isSelectSeat, setIsSelectSeat] = useState(false);
   const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
@@ -171,7 +175,7 @@ const Booking = () => {
       }
     };
 
-    if(currentSeats.length > 0) setMessage(false)
+    if(currentSeats.length > 0) setIsSelectSeat(false)
 
     window.addEventListener("keydown", handleEsc);
 
@@ -199,8 +203,13 @@ const Booking = () => {
         seatNumbers: currentSeats,
       };
 
-      await axiosPrivate.post("/ticket", postData);
-      navigate("/");
+      const response = await axiosPrivate.post("/ticket", postData);
+      if(response.data.message == "Buy tickets successfully") {
+        navigate("/");
+      }
+      else {
+        setMessage(response.data.message)
+      }
     } catch (error) {
       console.log("Error submitting form", error.response.data.message);
     }
@@ -278,13 +287,13 @@ const Booking = () => {
             <Button
               className="w-52"
               onClick={() => {
-                currentSeats.length > 0 ? setShowForm(true) : setMessage(true);
+                currentSeats.length > 0 ? setShowForm(true) : setIsSelectSeat(true);
               }}
             >
               Buy Ticket
             </Button>
           </div>
-          {message && (
+          {isSelectSeat && (
             <div className="flex justify-end mt-5 text-red-700">
               You must select a seat to buy ticket!
             </div>
@@ -299,6 +308,7 @@ const Booking = () => {
             showingDate={showTimeData.showingDate}
             retailPrice={movie.cost}
             currentSeats={currentSeats}
+            message={message}
           />
         )}
       </div>

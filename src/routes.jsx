@@ -4,7 +4,8 @@ import {
     NowShowing,
     ComingSoon,
     Booking,
-    Movie
+    Movie,
+    Ticket
 } from './pages'
 
 
@@ -20,6 +21,7 @@ const publicRoutes = [
 
 const privateRoutes = [
     { path: '/booking/:showTimeId', component: Booking },
+    { path: '/ticket/:accountId', component: Ticket },
 ]
 
 

@@ -11,7 +11,7 @@ const ComingSoon = () => {
   }, []);
 
   return (
-    <div className="md:px-40 py-8">
+    <div className="px-4 md:px-40 py-8">
       <div>
         <h1 className="uppercase font-bold text-3xl text-center sm:text-left">
           Coming soon Movies

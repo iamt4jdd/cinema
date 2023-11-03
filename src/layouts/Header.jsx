@@ -4,6 +4,7 @@ import { faNewspaper, faUser } from "@fortawesome/free-regular-svg-icons";
 import {
   faMoneyCheckDollar,
   faTicket,
+  faUserAstronaut,
 } from "@fortawesome/free-solid-svg-icons";
 import { useLocation, Link } from "react-router-dom";
 
@@ -33,6 +34,7 @@ const Header = () => {
   const axiosPrivate = useAxiosPrivate();
   const [toggle, setToggle] = useState(false);
   const [rechargeForm, setRechargeForm] = useState(false);
+  const [isCloseForm, setIsCloseForm] = useState(false);
   const { setUserContext } = useSelector();
   const { auth } = useAuth();
   const [user, setUser] = useState({});
@@ -63,6 +65,18 @@ const Header = () => {
       getUser();
     }
 
+    
+
+    return () => {
+      isMounted = false;
+      controller.abort();
+      effectRun.current = true;
+      
+    };
+  }, [auth, setUserContext, axiosPrivate]);
+
+  useEffect(() => {
+
     const handleEsc = (event) => {
       if (event.keyCode === 27) {
         setRechargeForm(false);
@@ -70,14 +84,11 @@ const Header = () => {
     };
 
     window.addEventListener("keydown", handleEsc);
-
+    
     return () => {
-      isMounted = false;
-      controller.abort();
-      effectRun.current = true;
       window.removeEventListener("keydown", handleEsc);
-    };
-  }, [auth, setUserContext, axiosPrivate]);
+    }
+  }, []) 
 
   const renderItems = (isRes) => {
     return NAV_ITEM.map((item, index) => {
@@ -115,7 +126,7 @@ const Header = () => {
 
   return (
     <>
-      {rechargeForm && <RechargeBalance accountId={user?.accountId} />}
+      {rechargeForm && <RechargeBalance accountId={user?.accountId} isCloseForm={isCloseForm} setIsCloseForm={setIsCloseForm} />}
       <div className="w-full md:px-40">
         <div className="flex justify-between text-[#ce1910]">
           <div className="flex ">
@@ -132,7 +143,7 @@ const Header = () => {
                 className=""
                 animation="zoom"
                 type="text"
-                to={`/ticket/${user?.accountId}`}
+                to={`/ticket/}`}
                 icon={<FontAwesomeIcon icon={faTicket} />}
               >
                 MY TICKETS
@@ -140,18 +151,22 @@ const Header = () => {
             )}
           </div>
           {user?.accountId ? (
-            <div className="flex space-x-2">
+            <div className="flex flex-col-reverse md:flex-row space-x-4 md:space-x-2">
               <Button
                 animation="zoom"
                 type="text"
                 icon={<FontAwesomeIcon icon={faMoneyCheckDollar} />}
-                onClick={() => setRechargeForm(true)}
+                onClick={() => {
+                  setRechargeForm(true)
+                  setIsCloseForm(false)
+                }}
               >
                 {user.balance.toLocaleString("en-US").replace(/,/g, ".")}
                 <span className="ml-0.5">₫</span>
               </Button>
               <div className="p-1 min-w-[92px] flex">
-                <div className="border-2 px-2 shadow-md border-red-500 text-center">
+                <div className="text-center md:mr-3 font-bold">
+                  <FontAwesomeIcon icon={faUserAstronaut} className="mr-2" />
                   {user.nickname}
                 </div>
               <SignOut/>
@@ -171,12 +186,12 @@ const Header = () => {
         </div>
       </div>
 
-      <div className={`w-full`}>
+      <div className='w-full z-[998]'>
         <Wrapper className={``}></Wrapper>
         <div
           className={`${
             isHome ? "absolute top-16" : "bg-[#222222]"
-          } flex justify-between w-full px-8 md:px-40`}
+          } flex justify-between w-full md:px-40`}
         >
           <div className="">
             <Link to="/">
@@ -194,7 +209,7 @@ const Header = () => {
             <img
               src={toggle ? images.close : images.menu}
               alt="menu"
-              className="w-[28px] h-[28px] object-contain"
+              className="w-[28px] h-[28px] object-contain mr-3"
               onClick={() => setToggle((prev) => !prev)}
             />
           </div>
@@ -202,8 +217,8 @@ const Header = () => {
           <div
             className={`${
               toggle ? "flex" : "hidden"
-            } p-6 bg-white absolute top-24 right-0 sm:right-[86px] mx-4 my-2
-								min-w-[140px] rounded-xl sidebar z-[100]`}
+            } p-6 bg-white absolute ${isHome ? 'top-16' : 'top-32'} right-0 sm:right-[86px] mx-4 my-2
+								min-w-[140px] rounded-xl sidebar shadow-xl z-[100]`}
           >
             <ul>{renderItems(1)}</ul>
           </div>

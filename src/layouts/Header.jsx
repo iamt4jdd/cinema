@@ -10,7 +10,7 @@ import { useLocation, Link } from "react-router-dom";
 import { useAxiosPrivate } from "~/hooks";
 import { useSelector, useAuth } from "~/hooks";
 
-import { Button, CarouselRenderer, RechargeBalance } from "~/components";
+import { Button, CarouselRenderer, RechargeBalance, SignOut } from "~/components";
 import images from "~/assets/images";
 
 const NAV_ITEM = [
@@ -150,10 +150,11 @@ const Header = () => {
                 {user.balance.toLocaleString("en-US").replace(/,/g, ".")}
                 <span className="ml-0.5">₫</span>
               </Button>
-              <div className="p-1 min-w-[92px]">
+              <div className="p-1 min-w-[92px] flex">
                 <div className="border-2 px-2 shadow-md border-red-500 text-center">
                   {user.nickname}
                 </div>
+              <SignOut/>
               </div>
             </div>
           ) : (

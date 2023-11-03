@@ -6,4 +6,5 @@ export { default as SliderRenderer } from './SliderRenderer';
 export { default as RequireAuth } from './RequireAuth';
 export { default as PersistLogin } from './PersistLogin';
 export { default as RechargeBalance } from './RechargeBalance';
+export { default as SignOut } from './SignOut';
 export { default as DateTimeFormatter } from './DateTimeFormatter';

@@ -57,12 +57,12 @@ const Recommended = () => {
 
   return (
     <>
-      <div className="pt-20">
+      <div className="pt-20 px-6 md:px-0">
         <div className="md:px-40">
           <h1 className="font-bold uppercase text-xl">You might also like</h1>
           <div className="border-b-2 border-gray-700">&nbsp;</div>
         </div>
-        <div className="px-[147px] mt-10">
+        <div className="md:px-[147px] mt-10">
           <SliderRenderer
             setSliderRef={setSliderRef}
             listSlider={recommendedMovie}
@@ -92,18 +92,17 @@ const BookingForm = ({
 
   return (
     showForm && (
-      <div className="fixed top-0 left-0 w-full h-full px-24 py-14 bg-blur z-[999]">
+      <div className="fixed top-0 left-0 w-full h-full md:px-24 py-14 bg-blur z-[999]">
         <div className="w-full h-full bg-white p-2">
           <div className="relative flex items-center justify-center">
             <h1 className="uppercase text-center text-2xl">Booking online</h1>
-
             <FontAwesomeIcon
               icon={faClose}
               className="absolute right-5 text-2xl hover:text-red-600"
               onClick={() => setShowForm(false)}
             />
           </div>
-          <div className="grid grid-cols-10 gap-y-4 mt-4">
+          <div className="grid grid-cols-3 md:grid-cols-10 gap-y-4 mt-4">
             {[...new Set(movies.map((movie) => movie.showingDate))]
               .sort((a, b) => a.localeCompare(b))
               .map((date) => {
@@ -218,7 +217,7 @@ const Movie = () => {
               backgroundPosition: "center center",
             }}
           >
-            <div className="flex px-40">
+            <div className="flex flex-col items-center md:items-start md:flex-row md:px-40">
               <div className="flex flex-col w-[270px] h-[432px] rounded-lg bg-black">
                 <img
                   src={movie.image}
@@ -229,7 +228,7 @@ const Movie = () => {
                   In cinemas
                 </div>
               </div>
-              <div className="ml-14 mt-10">
+              <div className="md:ml-14 mt-10 ml-2 w-72 md:w-[500px]">
                 <div className="text-white">
                   <h1 className="font-bold text-4xl uppercase">
                     {movie.title}

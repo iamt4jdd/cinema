@@ -1,5 +1,6 @@
 import logo from "./logo.png";
 import menu from "./menu.svg";
+import logout from "./logout.svg";
 import poster from "./poster.jpg";
 import tenet from "./tenet.jpg";
 import dunkirk from "./dunkirk.jpg";
@@ -14,6 +15,7 @@ import batman from "./batman.gif";
 const images = {
   logo,
   menu,
+  logout,
   poster,
   tenet,
   dunkirk,

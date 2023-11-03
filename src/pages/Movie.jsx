@@ -67,7 +67,6 @@ const Recommended = () => {
             setSliderRef={setSliderRef}
             listSlider={recommendedMovie}
           />
-          {console.log(recommendedMovie)}
         </div>
         <div className="flex flex-1 justify-between md:px-40 mt-6">
           <Button onClick={sliderRef?.slickPrev} className="w-[150px] h-11">

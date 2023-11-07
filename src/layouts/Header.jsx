@@ -143,7 +143,7 @@ const Header = () => {
                 className=""
                 animation="zoom"
                 type="text"
-                to={`/ticket/}`}
+                to={`/ticket`}
                 icon={<FontAwesomeIcon icon={faTicket} />}
               >
                 MY TICKETS
@@ -193,10 +193,10 @@ const Header = () => {
             isHome ? "absolute top-16" : "bg-[#222222]"
           } flex justify-between w-full md:px-40`}
         >
-          <div className="">
+          <div className="relative left-[-20px]">
             <Link to="/">
               <img
-                className={`w-[120px] h-[60px] mt-3 mb-4 ml-3`}
+                className={`w-[150px] h-[70px] my-2`}
                 src={images.logo}
                 alt="logo"
               />

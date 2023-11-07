@@ -21,7 +21,7 @@ const publicRoutes = [
 
 const privateRoutes = [
     { path: '/booking/:showTimeId', component: Booking },
-    { path: '/ticket/', component: Ticket },
+    { path: '/ticket', component: Ticket },
 ]
 
 

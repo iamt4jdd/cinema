@@ -33,7 +33,7 @@ const ContentContainer = ({
             </div>
           </div>
           {image && (
-            <div className="">
+            <div className="w-40">
               <img src={image} alt="" />
             </div>
           )}

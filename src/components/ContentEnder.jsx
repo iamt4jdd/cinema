@@ -17,7 +17,7 @@ const ContentEnder = () => {
                   </h1>
                   <div className="my-10 sm:mt-10 flex">
                       <Button
-                      to="/login"
+                      to="/coming-soon"
                       className="w-36 h-12"
                       animation="zoom"
                       >

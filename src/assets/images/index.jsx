@@ -8,6 +8,8 @@ import oppenheimer from "./oppenheimer.png";
 import mac from "./mac.svg";
 import close from "./close.svg";
 import TLou from "./TLou.png";
+import popcorn from "./popcorn.png";
+import QRCode from "./QRCode.png";
 import avatar from "./avatar.gif";
 import avatar2 from "./avatar2.gif";
 import batman from "./batman.gif";
@@ -23,6 +25,8 @@ const images = {
   mac,
   close,
   TLou,
+  popcorn,
+  QRCode,
   avatar,
   avatar2,
   batman,

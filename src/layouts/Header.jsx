@@ -193,7 +193,7 @@ const Header = () => {
             isHome ? "absolute top-16" : "bg-[#222222]"
           } flex justify-between w-full md:px-40`}
         >
-          <div className="relative left-[-20px]">
+          <div className="relative ">
             <Link to="/">
               <img
                 className={`w-[150px] h-[70px] my-2`}

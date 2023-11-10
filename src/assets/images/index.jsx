@@ -10,6 +10,7 @@ import close from "./close.svg";
 import TLou from "./TLou.png";
 import popcorn from "./popcorn.png";
 import QRCode from "./QRCode.png";
+import ticket from "./ticket.jpg";
 import avatar from "./avatar.gif";
 import avatar2 from "./avatar2.gif";
 import batman from "./batman.gif";
@@ -30,6 +31,7 @@ const images = {
   avatar,
   avatar2,
   batman,
+  ticket
 };
 
 export default images;

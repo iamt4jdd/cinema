@@ -48,17 +48,17 @@ const RechargeBalance = ({ accountId, isCloseForm, setIsCloseForm }) => {
   return (
     <>
       {!isCloseForm && (
-        <div className="fixed top-0 left-0 w-full h-full py-64 px-[32rem] bg-blur z-[1000]">
+        <div className="fixed top-0 left-0 w-full h-full py-52 px-2 md:py-64 md:px-[32rem] bg-blur z-[1000]">
           <div className="relative flex flex-col w-full h-full bg-white shadow-2xl">
             <Button
               type="text"
               animation="zoom"
-              className="absolute right-2 top-2"
+              className="absolute right-0 top-0 md:right-2 md:top-2"
               onClick={() => setIsCloseForm(true)}
             >
               <img src={images.close} alt="close" />
             </Button>
-            <div className="text-center py-4 uppercase text-2xl">
+            <div className="text-center mt-4 pt-4 uppercase text-2xl">
               Recharge your balance
             </div>
             <form className="px-20 h-full grid mt-5" onSubmit={handleSubmit}>

@@ -5,6 +5,7 @@ import { DateTimeFormatter, Button } from "~/components";
 import images from "~/assets/images";
 
 const Ticket = () => {
+
   const [hoverStates, setHoverStates] = useState([]);
   const [ticketData, setTicketData] = useState([]);
   const { userContext } = useSelector();
@@ -15,9 +16,13 @@ const Ticket = () => {
       .then((res) => setTicketData(res.data));
   }, [userContext.accountId]);
 
-  const handleDeleteTicket = async ({ ticketId }) => {
-    console.log(ticketId);
-    // axiosPrivate.delete(`/ticket`, { accountId: userContext.accountId, ticketId: ticketId});
+  const handleDeleteTicket = async (ticketId) => {
+
+    await axiosPrivate.delete(`/ticket`, {
+      data: { accountId: userContext.accountId, ticketId: ticketId },
+    });
+    window.location.reload();
+
   };
 
   return (
@@ -84,7 +89,10 @@ const Ticket = () => {
                   <p className="text-[#2a4247] font-semibold text-center">
                     <span>2D Vietsub</span>
                   </p>
-                  <img src={images.popcorn} className="mx-auto mt-2 w-28 h-28"/>
+                  {/* <img
+                    src={images.popcorn}
+                    className="mx-auto mt-2 w-28 h-28"
+                  /> */}
                 </div>
                 <div className="px-2 py-14">
                   <p className="grid gap-1 text-[#2a4247] font-semibold">
@@ -103,14 +111,14 @@ const Ticket = () => {
                       {ticket.cost.toLocaleString("en-US").replace(/,/g, ".")}
                       <span className="ml-0.5">₫</span>
                     </span>
-                    <span className="text-4xl font-bold mt-2 text-red-500">
+                    <span className="text-xl font-bold mt-2 text-red-500">
                       {ticket.title}
                     </span>
                   </p>
                 </div>
-                <div className="px-2 py-16">
-                  <img src={images.QRCode} alt="QRCode" className="w-20 h-20"/>
-                </div>
+                {/* <div className="px-2 py-16">
+                  <img src={images.QRCode} alt="QRCode" className="w-20 h-20" />
+                </div> */}
               </div>
             );
           })}

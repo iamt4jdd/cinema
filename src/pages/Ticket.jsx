@@ -5,7 +5,6 @@ import { DateTimeFormatter, Button } from "~/components";
 import images from "~/assets/images";
 
 const Ticket = () => {
-
   const [hoverStates, setHoverStates] = useState([]);
   const [ticketData, setTicketData] = useState([]);
   const { userContext } = useSelector();
@@ -17,12 +16,10 @@ const Ticket = () => {
   }, [userContext.accountId]);
 
   const handleDeleteTicket = async (ticketId) => {
-
     await axiosPrivate.delete(`/ticket`, {
       data: { accountId: userContext.accountId, ticketId: ticketId },
     });
     window.location.reload();
-
   };
 
   return (
@@ -32,25 +29,40 @@ const Ticket = () => {
           {ticketData.message}
         </div>
       ) : (
-        <div className="grid md:grid-cols-2 gap-12">
+        <div className="grid md:grid-cols-2 gap-16">
           {ticketData.map((ticket, index) => {
             return (
               <div
                 key={ticket.ticketId}
-                className="relative flex flex-row h-52 border-[3px] border-[#2a4247] rounded-md"
+                style={{
+                  backgroundImage: `url(${images.ticket})`,
+                  backgroundSize: "cover",
+                }}
+                className="relative h-60 flex flex-1 flex-row"
               >
-                <div className="absolute w-full h-10 sm:px-10 mt-3">
-                  <div className="w-full h-full bg-[#4d8691] rounded-sm">
-                    <p className="h-full flex justify-between items-center sm:px-2 text-white">
-                      <span>Ticket No: {ticket.ticketId}</span>
-                      <span className="uppercase font-semibold text-xl">
-                        Movie Ticket
-                      </span>
-                    </p>
-                  </div>
+                <div className="grow h-full px-2 py-14">
+                  <span className="relative top-[2.5rem] left-[10.5rem] text-2xl font-bold mt-2 text-[#2a4247]">
+                    {ticket.title}
+                  </span>
+                  <span className="absolute top-[8.14rem] text-[#2a4247] font-semibold left-[13.7rem]">
+                    {DateTimeFormatter.formatDate(ticket.showingDate)}
+                  </span>
+                  <p className="relative top-[4.4rem] text-[#2a4247] font-semibold">
+                    <span className="absolute left-[13rem]">
+                      {String.fromCharCode(
+                        65 + Math.floor((ticket.seatNumber - 1) / 10)
+                      ) +
+                        (((ticket.seatNumber - 1) % 10) + 1)}
+                    </span>
+
+                    <span className="absolute left-[18.2rem]">
+                      {ticket.cost.toLocaleString("en-US").replace(/,/g, ".")}
+                      <span className="ml-0.5">₫</span>
+                    </span>
+                  </p>
                 </div>
                 <div
-                  className="w-[52px] h-full border-r-2 border-gray-500"
+                  className="w-[5.8rem] h-full"
                   onMouseEnter={() =>
                     setHoverStates((prevStates) => {
                       const newStates = [...prevStates];
@@ -66,56 +78,28 @@ const Ticket = () => {
                     })
                   }
                 >
-                  &nbsp;
                   {hoverStates[index] && (
                     <div
-                      className={`flex items-end absolute bottom-0 left-0 h-full bg-blur animate-appearLeft`}
+                      className={`flex items-start absolute bottom-0 right-0 h-full bg-blur animate-appearRight`}
                     >
                       <Button
-                        className="flex flex-col uppercase w-[52px] py-2"
+                        className="flex flex-col uppercase w-[3rem] py-2 bg-blue-gray-600 hover:bg-blue-gray-900 z-[50]"
                         onClick={() => handleDeleteTicket(ticket.ticketId)}
                       >
+                        <div>R</div>
+                        <div>E</div>
+                        <div>F</div>
+                        <div>U</div>
+                        <div>N</div>
                         <div>D</div>
-                        <div>E</div>
-                        <div>L</div>
-                        <div>E</div>
-                        <div>T</div>
-                        <div>E</div>
                       </Button>
                     </div>
                   )}
+                    <span className="absolute top-[6.9rem] right-[-4.6rem] rotate-[270deg] z-10">
+                    {ticket.ticketId}
+                  </span>
                 </div>
-                <div className="w-1/3 px-2 py-16 h-full border-r-2 border-dashed border-[#2a4247]">
-                  <p className="text-[#2a4247] font-semibold text-center">
-                    <span>2D Vietsub</span>
-                  </p>
-                  {/* <img
-                    src={images.popcorn}
-                    className="mx-auto mt-2 w-28 h-28"
-                  /> */}
-                </div>
-                <div className="px-2 py-14">
-                  <p className="grid gap-1 text-[#2a4247] font-semibold">
-                    <span>
-                      Seat:{" "}
-                      {String.fromCharCode(
-                        65 + Math.floor((ticket.seatNumber - 1) / 10)
-                      ) +
-                        (((ticket.seatNumber - 1) % 10) + 1)}
-                    </span>
-                    <span>
-                      Date: {DateTimeFormatter.formatDate(ticket.showingDate)}
-                    </span>
-                    <span>
-                      Price:{" "}
-                      {ticket.cost.toLocaleString("en-US").replace(/,/g, ".")}
-                      <span className="ml-0.5">₫</span>
-                    </span>
-                    <span className="text-xl font-bold mt-2 text-red-500">
-                      {ticket.title}
-                    </span>
-                  </p>
-                </div>
+
                 {/* <div className="px-2 py-16">
                   <img src={images.QRCode} alt="QRCode" className="w-20 h-20" />
                 </div> */}

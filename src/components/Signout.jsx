@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useLogout } from "~/hooks";
 import images from "~/assets/images";
 
-const Signout = () => {
+const SignOut = () => {
   const navigate = useNavigate();
   const logout = useLogout();
 
@@ -18,4 +18,4 @@ const Signout = () => {
   );
 };
 
-export default Signout;
+export default SignOut;

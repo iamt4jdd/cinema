@@ -221,7 +221,7 @@ const Booking = () => {
 
       const response = await axiosPrivate.post("/ticket", postData);
       if (response.data.message == "Buy tickets successfully") {
-        navigate("/");
+        navigate("/ticket");
       } else {
         setMessage(response.data.message);
       }

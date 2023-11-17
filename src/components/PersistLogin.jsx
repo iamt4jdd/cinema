@@ -5,7 +5,7 @@ import { useAuth, useRefreshToken } from "~/hooks";
 const PersistLogin = () => {
   const [isLoading, setIsLoading] = useState(true);
   const refresh = useRefreshToken();
-  const { auth, isLoggedIn, persist, setIsLoggedIn } = useAuth();
+  const { auth, isLoggedIn, persist } = useAuth();
 
   useEffect(() => {
     let isMounted = true;
@@ -21,7 +21,7 @@ const PersistLogin = () => {
     };
 
     (!auth?.accessToken && persist) ? verifyRefreshToken() : setIsLoading(false);
-    if(!refresh()) setIsLoggedIn(false)
+
 
     return () => (isMounted = false);
   }, []);

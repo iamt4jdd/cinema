@@ -41,11 +41,15 @@ const Ticket = () => {
                 className="relative h-60 flex flex-1 flex-row"
               >
                 <div className="grow h-full px-2 py-14">
+                  <span className="relative top-[-3.6rem] left-[1.6rem] font-bold mt-2 text-white">
+                    {DateTimeFormatter.formatDate(ticket.purchaseDate)}
+                  </span>
                   <span className="relative top-[2.5rem] left-[10.5rem] text-2xl font-bold mt-2 text-[#2a4247]">
                     {ticket.title}
                   </span>
                   <span className="absolute top-[8.14rem] text-[#2a4247] font-semibold left-[13.7rem]">
-                    {DateTimeFormatter.formatDate(ticket.showingDate)}
+                    {DateTimeFormatter.formatDate(ticket.showingDate)}{" "}
+                    <span className="ml-2">{ticket.startTime}</span>
                   </span>
                   <p className="relative top-[4.4rem] text-[#2a4247] font-semibold">
                     <span className="absolute left-[13rem]">
@@ -95,7 +99,7 @@ const Ticket = () => {
                       </Button>
                     </div>
                   )}
-                    <span className="absolute top-[6.9rem] right-[-4.6rem] rotate-[270deg] z-10">
+                  <span className="absolute top-[6.9rem] right-[-4.6rem] rotate-[270deg] z-10">
                     {ticket.ticketId}
                   </span>
                 </div>

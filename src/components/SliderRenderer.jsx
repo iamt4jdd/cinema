@@ -54,7 +54,7 @@ const SliderRenderer = ({
         className="flex flex-1 md:px-[138px] xl:px-0"
       >
         {listSlider.map((slider) => (
-            <MovieRenderer key={slider.movieId} image={`http://34.124.214.252:5555/public/assets/${slider.thumbnail}`} title={slider.title} 
+            <MovieRenderer key={slider.movieId} image={`http://cinema.pantech.vn:5555/public/assets/${slider.thumbnail}`} title={slider.title} 
             genre={slider.genre} runTime={DateTimeFormatter.timeStringToMinutes(slider.runTime)} type={type} to={`/movie/${slider.movieId}`}
             className='px-3'
             />

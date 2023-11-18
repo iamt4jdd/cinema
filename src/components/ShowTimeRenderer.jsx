@@ -8,7 +8,7 @@ const ShowTimeRenderer = ({item}) => {
 
       return (
         <MovieRenderer 
-          image={`http://34.124.214.252:5555/public/assets/${item.thumbnail}`}
+          image={`http://cinema.pantech.vn:5555/public/assets/${item.thumbnail}`}
           title={item.title} 
           genre={item.genre}
           cost={item.cost}

@@ -47,17 +47,17 @@ function App() {
           <Routes>
             {publicRoutes.map((route, index) => {
               let Page = route.component;
-              let PersistElement = PersistLogin
+              // let PersistElement = PersistLogin
               let Layout = DefaultLayout;
 
-              if(route.path === '/login') PersistElement = null
+              // if(route.path === '/login') PersistElement = null
               if (route.layout) {
                 Layout = route.layout;
               } else if (route.layout === null) {
                 Layout = Fragment;
               }
               return (
-                <Route key={index} element={PersistElement && <PersistElement />}>
+                <Route key={index}>
                   <Route                   
                     path={route.path}
                     element={

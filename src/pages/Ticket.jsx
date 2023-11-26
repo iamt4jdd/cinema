@@ -2,10 +2,8 @@ import { useState, useEffect } from "react";
 import { axiosPrivate } from "~/api/axios";
 import { useSelector } from "~/hooks";
 import { DateTimeFormatter, Button } from "~/components";
-import images from "~/assets/images";
 
 const Ticket = () => {
-  const [hoverStates, setHoverStates] = useState([]);
   const [ticketData, setTicketData] = useState([]);
   const { userContext } = useSelector();
 
@@ -29,87 +27,88 @@ const Ticket = () => {
           {ticketData.message}
         </div>
       ) : (
-        <div className="grid md:grid-cols-2 gap-16">
-          {ticketData.map((ticket, index) => {
-            return (
-              <div
-                key={ticket.ticketId}
-                style={{
-                  backgroundImage: `url(${images.ticket})`,
-                  backgroundSize: "cover",
-                }}
-                className="relative h-60 flex flex-1 flex-row"
-              >
-                <div className="grow h-full px-2 py-14">
-                  <span className="relative top-[-3.6rem] left-[1.6rem] font-bold mt-2 text-white">
-                    {DateTimeFormatter.formatDate(ticket.purchaseDate)}
-                  </span>
-                  <span className="relative top-[2.5rem] left-[4.5rem] text-2xl font-bold mt-2 text-[#2a4247]">
-                    {ticket.title}
-                  </span>
-                  <span className="absolute top-[8.14rem] text-[#2a4247] font-semibold left-[13.7rem]">
-                    {DateTimeFormatter.formatDate(ticket.showingDate)}{" "}
-                    <span className="ml-2">{ticket.startTime}</span>
-                  </span>
-                  <p className="relative top-[4.4rem] text-[#2a4247] font-semibold">
-                    <span className="absolute left-[13rem]">
-                      {String.fromCharCode(
-                        65 + Math.floor((ticket.seatNumber - 1) / 10)
-                      ) +
-                        (((ticket.seatNumber - 1) % 10) + 1)}
-                    </span>
-
-                    <span className="absolute left-[18.2rem]">
-                      {ticket.cost.toLocaleString("en-US").replace(/,/g, ".")}
-                      <span className="ml-0.5">₫</span>
-                    </span>
-                  </p>
-                </div>
-                <div
-                  className="w-[5.8rem] h-full"
-                  onMouseEnter={() =>
-                    setHoverStates((prevStates) => {
-                      const newStates = [...prevStates];
-                      newStates[index] = true;
-                      return newStates;
-                    })
-                  }
-                  onMouseLeave={() =>
-                    setHoverStates((prevStates) => {
-                      const newStates = [...prevStates];
-                      newStates[index] = false;
-                      return newStates;
-                    })
-                  }
-                >
-                  {hoverStates[index] && (
-                    <div
-                      className={`flex items-start absolute bottom-0 right-0 h-full bg-blur animate-appearRight`}
+        <div className="relative overflow-x-auto overflow-y-auto shadow-md sm:rounded-lg max-h-[550px]">
+          <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 bg-white">
+            <table className="w-full text-sm text-left rtl:text-right text-gray-500">
+              <thead className="sticky top-0 text-xs text-gray-700 uppercase bg-gray-50 z-[1000]">
+                <tr className="text-center">
+                  <th scope="col" className="px-6 py-3">
+                    Movie Title
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Purchase Date
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Showing Date
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Start Time
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Seat
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Price
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {ticketData.map((ticket) => (
+                  <tr
+                    key={ticket.ticketId}
+                    className="bg-white border-b hover:bg-gray-50 font-bold text-black text-center"
+                  >
+                    <th
+                      scope="row"
+                      className="md:grid grid-cols-3 px-6 py-4 text-gray-900 whitespace-nowrap "
                     >
-                      <Button
-                        className="flex flex-col uppercase w-[3rem] py-2 bg-blue-gray-600 hover:bg-blue-gray-900 z-[50]"
-                        onClick={() => handleDeleteTicket(ticket.ticketId)}
-                      >
-                        <div>R</div>
-                        <div>E</div>
-                        <div>F</div>
-                        <div>U</div>
-                        <div>N</div>
-                        <div>D</div>
-                      </Button>
-                    </div>
-                  )}
-                  <span className="absolute top-[6.9rem] right-[-4.6rem] rotate-[270deg] z-10">
-                    {ticket.ticketId}
-                  </span>
-                </div>
+                      <img
+                        src={`http://cinema.pantech.vn:5555/public/assets/${ticket.thumbnail}`}
+                        alt="icon"
+                        className="w-10 h-10 rounded-full"
+                      />
+                      <div className="flex items-center justify-center col-span-2 text-base font-semibold">
+                        {ticket.title}
+                      </div>
+                    </th>
+                    <td className="px-6 py-4">
+                      {DateTimeFormatter.formatDate(ticket.purchaseDate)}
+                    </td>
+                    <td className="px-6 py-4">
+                      {DateTimeFormatter.formatDate(ticket.showingDate)}
+                    </td>
+                    <td className="px-6 py-4">{ticket.startTime}</td>
 
-                {/* <div className="px-2 py-16">
-                  <img src={images.QRCode} alt="QRCode" className="w-20 h-20" />
-                </div> */}
-              </div>
-            );
-          })}
+                    <td className="px-6 py-4">
+                      <div className="flex items-center justify-center">
+                        <div className="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
+                        {String.fromCharCode(
+                          65 + Math.floor((ticket.seatNumber - 1) / 10)
+                        )}
+                        {((ticket.seatNumber - 1) % 10) + 1}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      {ticket.cost.toLocaleString("en-US").replace(/,/g, ".")} ₫
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center justify-center">
+                        <Button
+                          className="flex flex-col uppercase w-[5rem]  py-2 bg-blue-gray-600 hover:bg-blue-gray-900 z-[50] hover:text-blue-500 rounded "
+                          onClick={() => handleDeleteTicket(ticket.ticketId)}
+                        >
+                          REFUND
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>
